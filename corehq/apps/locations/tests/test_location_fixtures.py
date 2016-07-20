@@ -264,6 +264,7 @@ class ForkedHierarchyLocationFixturesTest(LocationHierarchyPerTest, FixtureHasLo
     ]
 
     def setUp(self):
+        #
         self.domain_obj = bootstrap_domain(self.domain)
         self.user = create_restore_user(self.domain, 'user', '123')
         self.location_types = setup_location_types_with_structure(self.domain, self.location_type_structure)
