@@ -202,38 +202,38 @@ class BaseResumableSqlModelIteratorTest(object):
                          self.all_doc_ids + [self.first_doc_id])
 
 
-@override_settings(TESTS_SHOULD_USE_SQL_BACKEND=True)
-class XFormResumableSqlModelIteratorTest(BaseResumableSqlModelIteratorTest, TestCase):
-    @property
-    def reindex_accessor(self):
-        return FormReindexAccessor()
-
-    @classmethod
-    def create_docs(cls, domain, count):
-        meta = TestFormMetadata(domain=domain)
-        form_ids = ["f-{}".format(i) for i in range(count)]
-        for form_id in form_ids:
-            get_simple_wrapped_form(form_id, metadata=meta)
-
-        return form_ids
-
-    @classmethod
-    def setUpClass(cls):
-        super(XFormResumableSqlModelIteratorTest, cls).setUpClass()
-        super(XFormResumableSqlModelIteratorTest, cls).base_setUpClass()
-
-    @classmethod
-    def tearDownClass(cls):
-        super(XFormResumableSqlModelIteratorTest, cls).base_tearDownClass()
-        super(XFormResumableSqlModelIteratorTest, cls).tearDownClass()
-
-    def setUp(self):
-        super(XFormResumableSqlModelIteratorTest, self).setUp()
-        super(XFormResumableSqlModelIteratorTest, self).base_setUp()
-
-    def tearDown(self):
-        super(XFormResumableSqlModelIteratorTest, self).base_tearDown()
-        super(XFormResumableSqlModelIteratorTest, self).tearDown()
+# @override_settings(TESTS_SHOULD_USE_SQL_BACKEND=True)
+# class XFormResumableSqlModelIteratorTest(BaseResumableSqlModelIteratorTest, TestCase):
+#     @property
+#     def reindex_accessor(self):
+#         return FormReindexAccessor()
+#
+#     @classmethod
+#     def create_docs(cls, domain, count):
+#         meta = TestFormMetadata(domain=domain)
+#         form_ids = ["f-{}".format(i) for i in range(count)]
+#         for form_id in form_ids:
+#             get_simple_wrapped_form(form_id, metadata=meta)
+#
+#         return form_ids
+#
+#     @classmethod
+#     def setUpClass(cls):
+#         super(XFormResumableSqlModelIteratorTest, cls).setUpClass()
+#         super(XFormResumableSqlModelIteratorTest, cls).base_setUpClass()
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         super(XFormResumableSqlModelIteratorTest, cls).base_tearDownClass()
+#         super(XFormResumableSqlModelIteratorTest, cls).tearDownClass()
+#
+#     def setUp(self):
+#         super(XFormResumableSqlModelIteratorTest, self).setUp()
+#         super(XFormResumableSqlModelIteratorTest, self).base_setUp()
+#
+#     def tearDown(self):
+#         super(XFormResumableSqlModelIteratorTest, self).base_tearDown()
+#         super(XFormResumableSqlModelIteratorTest, self).tearDown()
 
 
 @override_settings(TESTS_SHOULD_USE_SQL_BACKEND=True)
@@ -266,52 +266,52 @@ class CaseResumableSqlModelIteratorTest(BaseResumableSqlModelIteratorTest, TestC
         super(CaseResumableSqlModelIteratorTest, self).tearDown()
 
 
-@override_settings(TESTS_SHOULD_USE_SQL_BACKEND=True)
-class LedgerResumableSqlModelIteratorTest(BaseResumableSqlModelIteratorTest, TestCase):
-    @property
-    def reindex_accessor(self):
-        return LedgerReindexAccessor()
-
-    @classmethod
-    def create_docs(cls, domain, count):
-        from corehq.apps.commtrack.tests.util import get_single_balance_block
-        from corehq.apps.hqcase.utils import submit_case_blocks
-        from corehq.apps.commtrack.helpers import make_product
-        from corehq.form_processor.parsers.ledgers.helpers import UniqueLedgerReference
-
-        cls.product = make_product(cls.domain, 'A Product', 'prodcode_a')
-
-        factory = CaseFactory(cls.domain)
-        case_ids = [factory.create_case().case_id for i in range(count)]
-
-        for case_id in case_ids:
-            submit_case_blocks([
-                get_single_balance_block(case_id, cls.product._id, 10)
-            ], domain)
-
-        return [
-            UniqueLedgerReference(case_id, 'stock', cls.product._id).as_id()
-            for case_id in case_ids
-        ]
-
-    @classmethod
-    def setUpClass(cls):
-        super(LedgerResumableSqlModelIteratorTest, cls).setUpClass()
-        super(LedgerResumableSqlModelIteratorTest, cls).base_setUpClass()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.product.delete()
-        super(LedgerResumableSqlModelIteratorTest, cls).base_tearDownClass()
-        super(LedgerResumableSqlModelIteratorTest, cls).tearDownClass()
-
-    def setUp(self):
-        super(LedgerResumableSqlModelIteratorTest, self).setUp()
-        super(LedgerResumableSqlModelIteratorTest, self).base_setUp()
-
-    def tearDown(self):
-        super(LedgerResumableSqlModelIteratorTest, self).base_tearDown()
-        super(LedgerResumableSqlModelIteratorTest, self).tearDown()
+# @override_settings(TESTS_SHOULD_USE_SQL_BACKEND=True)
+# class LedgerResumableSqlModelIteratorTest(BaseResumableSqlModelIteratorTest, TestCase):
+#     @property
+#     def reindex_accessor(self):
+#         return LedgerReindexAccessor()
+#
+#     @classmethod
+#     def create_docs(cls, domain, count):
+#         from corehq.apps.commtrack.tests.util import get_single_balance_block
+#         from corehq.apps.hqcase.utils import submit_case_blocks
+#         from corehq.apps.commtrack.helpers import make_product
+#         from corehq.form_processor.parsers.ledgers.helpers import UniqueLedgerReference
+#
+#         cls.product = make_product(cls.domain, 'A Product', 'prodcode_a')
+#
+#         factory = CaseFactory(cls.domain)
+#         case_ids = [factory.create_case().case_id for i in range(count)]
+#
+#         for case_id in case_ids:
+#             submit_case_blocks([
+#                 get_single_balance_block(case_id, cls.product._id, 10)
+#             ], domain)
+#
+#         return [
+#             UniqueLedgerReference(case_id, 'stock', cls.product._id).as_id()
+#             for case_id in case_ids
+#         ]
+#
+#     @classmethod
+#     def setUpClass(cls):
+#         super(LedgerResumableSqlModelIteratorTest, cls).setUpClass()
+#         super(LedgerResumableSqlModelIteratorTest, cls).base_setUpClass()
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         cls.product.delete()
+#         super(LedgerResumableSqlModelIteratorTest, cls).base_tearDownClass()
+#         super(LedgerResumableSqlModelIteratorTest, cls).tearDownClass()
+#
+#     def setUp(self):
+#         super(LedgerResumableSqlModelIteratorTest, self).setUp()
+#         super(LedgerResumableSqlModelIteratorTest, self).base_setUp()
+#
+#     def tearDown(self):
+#         super(LedgerResumableSqlModelIteratorTest, self).base_tearDown()
+#         super(LedgerResumableSqlModelIteratorTest, self).tearDown()
 
 
 class DemoProcessor(BaseDocProcessor):
