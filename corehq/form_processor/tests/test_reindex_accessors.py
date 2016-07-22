@@ -193,32 +193,32 @@ class BaseLedgerReindexAccessorTest(BaseReindexAccessorTest):
         return [doc.ledger_reference.as_id() for doc in docs]
 
 
-class UnshardedLedgerReindexAccessorTests(BaseUnshardedAccessorMixin, BaseLedgerReindexAccessorTest, TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        super(UnshardedLedgerReindexAccessorTests, cls).class_setup()
-        super(UnshardedLedgerReindexAccessorTests, cls).setUpClass()
-        super(UnshardedLedgerReindexAccessorTests, cls).class_setup_reindex()
-
-    @classmethod
-    def tearDownClass(cls):
-        super(UnshardedLedgerReindexAccessorTests, cls).class_teardown_reindex()
-        super(UnshardedLedgerReindexAccessorTests, cls).tearDownClass()
-
-
-class ShardedLedgerReindexAccessorTests(BaseShardedAccessorMixin, BaseLedgerReindexAccessorTest, TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        super(ShardedLedgerReindexAccessorTests, cls).class_setup()
-        super(ShardedLedgerReindexAccessorTests, cls).setUpClass()
-        super(ShardedLedgerReindexAccessorTests, cls).class_setup_reindex()
-
-    @classmethod
-    def tearDownClass(cls):
-        super(ShardedLedgerReindexAccessorTests, cls).class_teardown_reindex()
-        super(ShardedLedgerReindexAccessorTests, cls).tearDownClass()
+# class UnshardedLedgerReindexAccessorTests(BaseUnshardedAccessorMixin, BaseLedgerReindexAccessorTest, TestCase):
+#
+#     @classmethod
+#     def setUpClass(cls):
+#         super(UnshardedLedgerReindexAccessorTests, cls).class_setup()
+#         super(UnshardedLedgerReindexAccessorTests, cls).setUpClass()
+#         super(UnshardedLedgerReindexAccessorTests, cls).class_setup_reindex()
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         super(UnshardedLedgerReindexAccessorTests, cls).class_teardown_reindex()
+#         super(UnshardedLedgerReindexAccessorTests, cls).tearDownClass()
+#
+#
+# class ShardedLedgerReindexAccessorTests(BaseShardedAccessorMixin, BaseLedgerReindexAccessorTest, TestCase):
+#
+#     @classmethod
+#     def setUpClass(cls):
+#         super(ShardedLedgerReindexAccessorTests, cls).class_setup()
+#         super(ShardedLedgerReindexAccessorTests, cls).setUpClass()
+#         super(ShardedLedgerReindexAccessorTests, cls).class_setup_reindex()
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         super(ShardedLedgerReindexAccessorTests, cls).class_teardown_reindex()
+#         super(ShardedLedgerReindexAccessorTests, cls).tearDownClass()
 
 
 def _create_ledger(domain, entry_id, balance, case_id=None, section_id='stock'):
