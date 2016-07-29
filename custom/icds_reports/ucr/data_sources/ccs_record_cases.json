@@ -159,6 +159,16 @@
       {
         "display_name": null,
         "property_path": [],
+        "datatype": "datetime",
+        "is_primary_key": false,
+        "column_id": "closed_on",
+        "is_nullable": true,
+        "type": "raw",
+        "property_name": "closed_on"
+      },
+      {
+        "display_name": null,
+        "property_path": [],
         "datatype": "date",
         "is_primary_key": false,
         "column_id": "edd",
@@ -559,6 +569,28 @@
             "datatype": null,
             "type": "property_name",
             "property_name": "dob"
+          },
+          "type": "related_doc",
+          "related_doc_type": "CommCareCase",
+          "doc_id_expression": {
+            "type": "named",
+            "name": "parent_id"
+          }
+        }
+      },
+      {
+        "display_name": null,
+        "transform": {},
+        "datatype": "string",
+        "type": "expression",
+        "is_primary_key": false,
+        "is_nullable": true,
+        "column_id": "disabled",
+        "expression": {
+          "value_expression": {
+            "datatype": null,
+            "type": "property_name",
+            "property_name": "disabled"
           },
           "type": "related_doc",
           "related_doc_type": "CommCareCase",
