@@ -26,7 +26,8 @@
         "http://openrosa.org/formdesigner/376FA2E1-6FD1-4C9E-ACB4-E046038CD5E2",
         "http://openrosa.org/formdesigner/D4A7ABD2-A7B8-431B-A88B-38245173B0AE",
         "http://openrosa.org/formdesigner/89097FB1-6C08-48BA-95B2-67BCF0C5091D",
-        "http://openrosa.org/formdesigner/792DAF2B-E117-424A-A673-34E1513ABD88"
+        "http://openrosa.org/formdesigner/792DAF2B-E117-424A-A673-34E1513ABD88",
+        "http://openrosa.org/formdesigner/619B942A-362E-43DE-8650-ED37026D9AC4"
       ]
     },
     "configured_indicators": [
@@ -359,6 +360,60 @@
             "property_name": "xmlns"
           },
           "property_value": "http://openrosa.org/formdesigner/792DAF2B-E117-424A-A673-34E1513ABD88"
+        }
+      },
+      {
+        "type": "boolean",
+        "column_id": "due_list_ccs",
+        "filter": {
+          "type": "and",
+          "filters": [
+            {
+              "operator": "eq",
+              "type": "boolean_expression",
+              "expression": {
+                "type": "property_name",
+                "property_name": "xmlns"
+              },
+              "property_value": "http://openrosa.org/formdesigner/619B942A-362E-43DE-8650-ED37026D9AC4"
+            },
+            {
+              "operator": "eq",
+              "type": "boolean_expression",
+              "expression": {
+                "type": "property_path",
+                "property_path": [ "form", "tasks_type_loaded" ]
+              },
+              "property_value": "pregnancy"
+            }
+          ]
+        }
+      },
+      {
+        "type": "boolean",
+        "column_id": "due_list_child",
+        "filter": {
+          "type": "and",
+          "filters": [
+            {
+              "operator": "eq",
+              "type": "boolean_expression",
+              "expression": {
+                "type": "property_name",
+                "property_name": "xmlns"
+              },
+              "property_value": "http://openrosa.org/formdesigner/619B942A-362E-43DE-8650-ED37026D9AC4"
+            },
+            {
+              "operator": "eq",
+              "type": "boolean_expression",
+              "expression": {
+                "type": "property_path",
+                "property_path": ["form", "tasks_type_loaded"]
+              },
+              "property_value": "child"
+            }
+          ]          
         }
       },
       {
