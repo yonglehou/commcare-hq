@@ -158,13 +158,23 @@
       },
       {
         "display_name": null,
-        "property_path": [],
+        "property_path": [ ],
         "datatype": "datetime",
         "is_primary_key": false,
         "column_id": "closed_on",
         "is_nullable": true,
         "type": "raw",
         "property_name": "closed_on"
+      },
+      {
+        "display_name": "Last Modified",
+        "property_path": [],
+        "datatype": "datetime",
+        "is_primary_key": false,
+        "column_id": "modified_on",
+        "is_nullable": true,
+        "type": "raw",
+        "property_name": "modified_on"
       },
       {
         "display_name": null,
