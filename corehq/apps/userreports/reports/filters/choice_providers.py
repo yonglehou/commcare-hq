@@ -143,16 +143,28 @@ class LocationChoiceProvider(ChainableChoiceProvider):
     def __init__(self, report, filter_slug):
         super(LocationChoiceProvider, self).__init__(report, filter_slug)
         self.include_descendants = False
+        self.allowed_location_type = None
 
     def configure(self, spec):
         self.include_descendants = spec.get('include_descendants', self.include_descendants)
+        self.allowed_location_type = spec.get('allowed_location_type', self.allowed_location_type)
 
     def _locations_query(self, query_text):
+        if self.allowed_location_type is None :
+            base_objects = 
+        else:
+            
         if query_text:
-            return SQLLocation.active_objects.filter_path_by_user_input(
+            query_result = SQLLocation.active_objects.filter_path_by_user_input(
                 domain=self.domain, user_input=query_text)
         else:
-            return SQLLocation.active_objects.filter(domain=self.domain)
+            query_result = SQLLocation.active_objects.filter(domain=self.domain)
+
+        if self.allowed_location_type is not None:
+            return query_result.filter(
+                location_type__code=self.allowed_location_type)
+        else
+            return query_result
 
     def query(self, query_context):
         # todo: consider making this an extensions framework similar to custom expressions
