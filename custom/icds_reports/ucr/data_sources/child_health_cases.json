@@ -90,13 +90,56 @@
       },
       {
         "display_name": null,
-        "property_path": [],
+        "property_path": [ ],
         "datatype": "string",
         "is_primary_key": false,
         "column_id": "owner_id",
         "is_nullable": true,
         "type": "raw",
         "property_name": "owner_id"
+      },
+      {
+        "display_name": null,
+        "datatype": "string",
+        "expression": {
+          "expression": {
+            "datatype": null,
+            "type": "property_name",
+            "property_name": "case_id"
+          },
+          "type": "root_doc"
+        },
+        "transform": { },
+        "is_nullable": false,
+        "is_primary_key": false,
+        "column_id": "case_id",
+        "type": "expression"
+      },
+      {
+        "display_name": null,
+        "datatype": "string",
+        "expression": {
+          "type": "named",
+          "name": "parent_parent_id"
+        },
+        "transform": { },
+        "is_nullable": false,
+        "is_primary_key": false,
+        "column_id": "household_id",
+        "type": "expression"
+      },
+      {
+        "display_name": null,
+        "datatype": "string",
+        "expression": {
+          "type": "named",
+          "name": "parent_id"
+        },
+        "transform": { },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "column_id": "mother_id",
+        "type": "expression"
       },
       {
         "display_name": null,
