@@ -242,6 +242,28 @@
         "type": "expression"
       },
       {
+        "column_id": "sex",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "value_expression": {
+            "datatype": null,
+            "type": "property_name",
+            "property_name": "sex"
+          },
+          "type": "related_doc",
+          "related_doc_type": "CommCareCase",
+          "doc_id_expression": {
+            "type": "named",
+            "name": "parent_id"
+          }
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": { },
+        "type": "expression"
+      },
+      {
         "column_id": "disabled",
         "datatype": "string",
         "display_name": null,
