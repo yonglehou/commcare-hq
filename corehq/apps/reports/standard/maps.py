@@ -170,18 +170,11 @@ class GenericMapReport(ProjectReport, ProjectReportParametersMixin):
         # can be queried in bulk
 
         for data in source.get_data():
-            case = CommCareCase.wrap(data['_case']).to_api_json()
+            case = CommCareCase.wrap(data['_case'])
             del data['_case']
 
-            data['num_forms'] = len(case['xform_ids'])
-            standard_props = (
-                'case_name',
-                'case_type',
-                'date_opened',
-                'external_id',
-                'owner_id',
-             )
-            data.update(('prop_%s' % k, v) for k, v in case['properties'].iteritems() if k not in standard_props)
+            data['num_forms'] = len(case.xform_ids)
+            data.update(('prop_%s' % k, v) for k, v in case.dynamic_case_properties().iteritems())
 
             GEO_DEFAULT = 'gps' # case property
             geo = None
