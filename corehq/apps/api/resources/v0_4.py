@@ -136,6 +136,20 @@ class XFormInstanceResource(SimpleSortableResourceMixin, v0_3.XFormInstanceResou
             es_client=self.xform_es(domain)
         ).order_by('-received_on')
 
+    def obj_get(self, bundle, **kwargs):
+        from corehq.pillows.xform import transform_xform_for_elasticsearch, xform_pillow_filter
+
+        instance_id = kwargs['pk']
+        try:
+            json_form = FormAccessors(kwargs['domain']).get_form(instance_id).to_json()
+            if xform_pillow_filter(json_form):
+                raise object_does_not_exist("XFormInstance", instance_id)
+            else:
+                es_form = transform_xform_for_elasticsearch(json_form)
+                return ESXFormInstance(es_form)
+        except XFormNotFound:
+            raise object_does_not_exist("XFormInstance", instance_id)
+
     class Meta(v0_3.XFormInstanceResource.Meta):
         ordering = ['received_on']
         list_allowed_methods = ['get']
