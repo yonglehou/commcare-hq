@@ -1,6 +1,8 @@
+from collections import defaultdict
 from functools import wraps
 from couchdbkit.exceptions import ResourceNotFound
 
+from corehq.form_processor.interfaces.dbaccessors import FormAccessors, CaseAccessors
 from couchforms import const
 from dimagi.ext.couchdbkit import *
 
@@ -149,6 +151,104 @@ class ESXFormInstance(object):
     @property
     def name(self):
         return self.form_data.get(const.TAG_NAME, "")
+
+    def __getattr__(self, name):
+        return self._data.get(name, None)
+
+    def __setattr__(self, name, value):
+        self.__dict__['_data'][name] = value
+
+    def to_dict(self):
+        return self._data
+
+
+def group_by_dict(objs, fn):
+    """
+    Itertools.groupby returns a transient iterator with alien
+    data types in it. This returns a dictionary of lists.
+    Less efficient but clients can write naturally and used
+    only for things that have to fit in memory easily anyhow.
+    """
+    result = defaultdict(list)
+    for obj in objs:
+
+        key = fn(obj)
+        result[key].append(obj)
+    return result
+
+
+class ESCase(object):
+    def __init__(self, initial=None):
+        self.__dict__['_data'] = initial or {}
+
+    @property
+    def case_id(self):
+        return self._id
+
+    @property
+    def server_opened_on(self):
+        try:
+            open_action = self.actions[0]
+            return open_action['server_date']
+        except Exception:
+            pass
+
+    def get_index_map(self):
+        from corehq.form_processor.abstract_models import get_index_map
+        from casexml.apps.case.sharedmodels import CommCareCaseIndex
+        return get_index_map([CommCareCaseIndex.wrap(index) for index in self.indices])
+
+    def get_properties_in_api_format(self):
+        if self.case_json is not None:
+            return dict(self.case_json.items() + {
+                "external_id": self.external_id,
+                "owner_id": self.owner_id,
+                # renamed
+                "case_name": self.name,
+                # renamed
+                "case_type": self.type,
+                # renamed
+                "date_opened": self.opened_on,
+                # all custom properties go here
+            }.items())
+        else:
+            from casexml.apps.case.models import CommCareCase
+            return CommCareCase.wrap(self.__dict__['_data']).get_properties_in_api_format()
+
+    @property
+    def reverse_indices(self):
+        return CaseAccessors(self.domain).get_all_reverse_indices_info([self._id])
+
+    def get_forms(self):
+        from corehq.apps.api.util import form_to_es_form
+        forms = FormAccessors(self.domain).get_forms(self.xform_ids)
+        return filter(None, [form_to_es_form(form) for form in forms])
+
+    @property
+    def child_cases(self):
+        from corehq.apps.api.util import case_to_es_case
+        accessor = CaseAccessors(self.domain)
+        return {
+            index.identifier: case_to_es_case(accessor.get_case(index.case_id))
+            for index in self.reverse_indices
+        }
+
+    @property
+    def parent_cases(self):
+        from corehq.apps.api.util import case_to_es_case
+        accessor = CaseAccessors(self.domain)
+        return {
+            index['identifier']: case_to_es_case(accessor.get_case(index['referenced_id']))
+            for index in self.indices
+        }
+
+    @property
+    def xforms_by_name(self):
+        return group_by_dict(self.get_forms(), lambda form: form.name)
+
+    @property
+    def xforms_by_xmlns(self):
+        return group_by_dict(self.get_forms(), lambda form: form.xmlns)
 
     def __getattr__(self, name):
         return self._data.get(name, None)
