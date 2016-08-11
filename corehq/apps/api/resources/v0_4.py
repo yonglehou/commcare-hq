@@ -6,16 +6,17 @@ from tastypie import fields
 from tastypie.bundle import Bundle
 from tastypie.authentication import Authentication
 from tastypie.exceptions import BadRequest
+
+from corehq.apps.api.models import ESXFormInstance
 from corehq.apps.api.resources.v0_1 import CustomResourceMeta, RequirePermissionAuthentication, \
     _safe_bool
-from corehq.form_processor.interfaces.dbaccessors import CaseAccessors
-
-from couchforms.models import doc_types
+from corehq.form_processor.exceptions import XFormNotFound
+from corehq.form_processor.interfaces.dbaccessors import CaseAccessors, FormAccessors
 from casexml.apps.case.models import CommCareCase
 from casexml.apps.case import xform as casexml_xform
 from custom.hope.models import HOPECase, CC_BIHAR_NEWBORN, CC_BIHAR_PREGNANCY
 
-from corehq.apps.api.util import get_object_or_not_exist
+from corehq.apps.api.util import get_object_or_not_exist, object_does_not_exist
 from corehq.apps.app_manager import util as app_manager_util
 from corehq.apps.app_manager.models import Application, RemoteApp
 from corehq.apps.app_manager.dbaccessors import get_apps_in_domain
@@ -45,13 +46,21 @@ from no_exceptions.exceptions import Http400
 MOCK_XFORM_ES = None
 MOCK_CASE_ES = None
 
-xform_doc_types = doc_types()
-
 
 class XFormInstanceResource(SimpleSortableResourceMixin, v0_3.XFormInstanceResource, DomainSpecificResourceMixin):
+    """This version of the form resource is built of Elasticsearch data
+    which gets wrapped by ``ESXFormInstance``.
+    No type conversion is done e.g. dates and some fields are named differently than in the
+    Python models.
+    """
+
+    form = fields.DictField(attribute='form')
+    received_on = fields.CharField(attribute="received_on")
+    id = fields.CharField(attribute='_id', readonly=True, unique=True)
 
     # Some fields that were present when just fetching individual docs are
     # not present for e.g. devicelogs and must be allowed blank
+
     uiversion = fields.CharField(attribute='uiversion', blank=True, null=True)
     metadata = fields.DictField(attribute='metadata', blank=True, null=True)
     domain = fields.CharField(attribute='domain')
@@ -64,7 +73,7 @@ class XFormInstanceResource(SimpleSortableResourceMixin, v0_3.XFormInstanceResou
     cases = UseIfRequested(
         ToManyDocumentsField(
             'corehq.apps.api.resources.v0_4.CommCareCaseResource',
-            attribute=lambda xform: casexml_xform.cases_referenced_by_xform(xform)
+            attribute=lambda xform: casexml_xform.cases_referenced_by_xform(xform.form_data)
         )
     )
 
@@ -118,11 +127,7 @@ class XFormInstanceResource(SimpleSortableResourceMixin, v0_3.XFormInstanceResou
             es_query['filter']['and'].append({'term': {'doc_type': 'xforminstance'}})
 
         def wrapper(doc):
-            if doc['doc_type'] in xform_doc_types:
-                doc.pop('user_id', None)  # needed when xform is stored in sql
-                return xform_doc_types[doc['doc_type']].wrap(doc)
-            else:
-                return doc
+            return ESXFormInstance(doc)
 
         # Note that XFormES is used only as an ES client, for `run_query` against the proper index
         return ElasticAPIQuerySet(
@@ -134,6 +139,7 @@ class XFormInstanceResource(SimpleSortableResourceMixin, v0_3.XFormInstanceResou
     class Meta(v0_3.XFormInstanceResource.Meta):
         ordering = ['received_on']
         list_allowed_methods = ['get']
+        object_class = ESXFormInstance
 
 
 class RepeaterResource(CouchResourceMixin, HqBaseResource, DomainSpecificResourceMixin):

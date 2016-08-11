@@ -1,5 +1,7 @@
 from functools import wraps
 from couchdbkit.exceptions import ResourceNotFound
+
+from couchforms import const
 from dimagi.ext.couchdbkit import *
 
 from django.contrib.auth.hashers import make_password
@@ -89,3 +91,70 @@ def _require_api_user(permission=None):
 require_api_user = _require_api_user()
 require_api_user_permission = _require_api_user
 
+
+class ESXFormInstance(object):
+    def __init__(self, initial=None):
+        self.__dict__['_data'] = initial or {}
+
+    @property
+    def form_data(self):
+        return self._data[const.TAG_FORM]
+
+    @property
+    def metadata(self):
+        from corehq.form_processor.utils import clean_metadata
+        from couchforms.models import Metadata
+        if const.TAG_META in self.form_data:
+            return Metadata.wrap(clean_metadata(self.form_data[const.TAG_META]))
+
+        return None
+
+    @property
+    def is_archived(self):
+        return self.doc_type == 'XFormArchived'
+
+    @property
+    def blobs(self):
+        from corehq.blobs.mixin import BlobMeta
+        blobs = {}
+        if self._attachments:
+            blobs.update({
+                name: BlobMeta(
+                    id=None,
+                    content_length=info.get("length", None),
+                    content_type=info.get("content_type", None),
+                    digest=info.get("digest", None),
+                ) for name, info in self._attachments.iteritems()
+            })
+        if self.external_blobs:
+            blobs.update({
+                name: BlobMeta.wrap(info)
+                for name, info in self.external_blobs.iteritems()
+            })
+
+        return blobs
+
+    @property
+    def version(self):
+        return self.form_data.get(const.TAG_VERSION, "")
+
+    @property
+    def uiversion(self):
+        return self.form_data.get(const.TAG_UIVERSION, "")
+
+    @property
+    def type(self):
+        return self.form_data.get(const.TAG_TYPE, "")
+
+    @property
+    def name(self):
+        return self.form_data.get(const.TAG_NAME, "")
+
+    def __getattr__(self, name):
+        return self._data.get(name, None)
+
+    def __setattr__(self, name, value):
+        self.__dict__['_data'][name] = value
+
+    def to_dict(self):
+        return self._data
