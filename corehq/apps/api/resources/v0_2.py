@@ -59,10 +59,8 @@ class CommCareCaseResource(HqBaseResource, DomainSpecificResourceMixin):
         status = api_closed_to_status(request_params.get('closed', 'false'))
         filters = get_filters_from_request_params(request_params, limit_top_level=self.fields)
         case_type = filters.get('properties/case_type', None)
-        return map(dict_object, get_filtered_cases(domain, status=status,
-                                  case_type=case_type,
-                                  user_id=user_id,
-                                  filters=filters))
+        case_results = get_filtered_cases(domain, status=status, case_type=case_type, user_id=user_id, filters=filters)
+        return [case_to_es_case(result.couch_doc) for result in case_results]
 
     class Meta(CustomResourceMeta):
         authentication = RequirePermissionAuthentication(Permissions.edit_data)
