@@ -16,7 +16,7 @@ from casexml.apps.case.models import CommCareCase
 from casexml.apps.case import xform as casexml_xform
 from custom.hope.models import HOPECase, CC_BIHAR_NEWBORN, CC_BIHAR_PREGNANCY
 
-from corehq.apps.api.util import get_object_or_not_exist, object_does_not_exist
+from corehq.apps.api.util import get_object_or_not_exist, object_does_not_exist, form_to_es_form
 from corehq.apps.app_manager import util as app_manager_util
 from corehq.apps.app_manager.models import Application, RemoteApp
 from corehq.apps.app_manager.dbaccessors import get_apps_in_domain
@@ -137,16 +137,14 @@ class XFormInstanceResource(SimpleSortableResourceMixin, v0_3.XFormInstanceResou
         ).order_by('-received_on')
 
     def obj_get(self, bundle, **kwargs):
-        from corehq.pillows.xform import transform_xform_for_elasticsearch, xform_pillow_filter
-
         instance_id = kwargs['pk']
         try:
-            json_form = FormAccessors(kwargs['domain']).get_form(instance_id).to_json()
-            if xform_pillow_filter(json_form):
-                raise object_does_not_exist("XFormInstance", instance_id)
+            form = FormAccessors(kwargs['domain']).get_form(instance_id)
+            es_form = form_to_es_form(form)
+            if es_form:
+                return es_form
             else:
-                es_form = transform_xform_for_elasticsearch(json_form)
-                return ESXFormInstance(es_form)
+                raise XFormNotFound
         except XFormNotFound:
             raise object_does_not_exist("XFormInstance", instance_id)
 
