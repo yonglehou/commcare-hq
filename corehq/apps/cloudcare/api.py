@@ -46,11 +46,10 @@ class CaseAPIResult(object):
     between an id-only representation and a full_blown one.
     """
 
-    def __init__(self, id=None, couch_doc=None, id_only=False, lite=True, sanitize=True):
+    def __init__(self, id=None, couch_doc=None, id_only=False, sanitize=True):
         self._id = id
         self._couch_doc = couch_doc
         self.id_only = id_only
-        self.lite = lite
         self.sanitize = sanitize
 
     def __getitem__(self, key):
@@ -73,7 +72,7 @@ class CaseAPIResult(object):
 
     @property
     def case_json(self):
-        json = self.couch_doc.to_api_json(lite=self.lite)
+        json = self.couch_doc.to_api_json(lite=True)
         if self.sanitize:
             # This ensures that any None value will be encoded as "" instead of null
             # This fixes http://manage.dimagi.com/default.asp?158655 because mobile chokes on null
