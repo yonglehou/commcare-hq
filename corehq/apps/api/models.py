@@ -95,6 +95,11 @@ require_api_user_permission = _require_api_user
 
 
 class ESXFormInstance(object):
+    """This wrapper around form data returned from ES which
+    provides attribute access and helper functions for
+    the Form API.
+    """
+
     def __init__(self, initial=None):
         self.__dict__['_data'] = initial or {}
 
@@ -178,6 +183,11 @@ def group_by_dict(objs, fn):
 
 
 class ESCase(object):
+    """This wrapper around case data returned from ES which
+    provides attribute access and helper functions for
+    the Case API.
+    """
+
     def __init__(self, initial=None):
         self.__dict__['_data'] = initial or {}
 
