@@ -2,6 +2,7 @@ from collections import defaultdict
 from functools import wraps
 from couchdbkit.exceptions import ResourceNotFound
 
+from corehq.apps.api.resources import dict_object
 from corehq.form_processor.interfaces.dbaccessors import FormAccessors, CaseAccessors
 from couchforms import const
 from dimagi.ext.couchdbkit import *
@@ -94,14 +95,11 @@ require_api_user = _require_api_user()
 require_api_user_permission = _require_api_user
 
 
-class ESXFormInstance(object):
+class ESXFormInstance(dict_object):
     """This wrapper around form data returned from ES which
     provides attribute access and helper functions for
     the Form API.
     """
-
-    def __init__(self, initial=None):
-        self.__dict__['_data'] = initial or {}
 
     @property
     def form_data(self):
@@ -157,15 +155,6 @@ class ESXFormInstance(object):
     def name(self):
         return self.form_data.get(const.TAG_NAME, "")
 
-    def __getattr__(self, name):
-        return self._data.get(name, None)
-
-    def __setattr__(self, name, value):
-        self.__dict__['_data'][name] = value
-
-    def to_dict(self):
-        return self._data
-
 
 def _group_by_dict(objs, fn):
     """
@@ -182,14 +171,11 @@ def _group_by_dict(objs, fn):
     return result
 
 
-class ESCase(object):
+class ESCase(dict_object):
     """This wrapper around case data returned from ES which
     provides attribute access and helper functions for
     the Case API.
     """
-
-    def __init__(self, initial=None):
-        self.__dict__['_data'] = initial or {}
 
     @property
     def case_id(self):
@@ -223,7 +209,7 @@ class ESCase(object):
             }.items())
         else:
             from casexml.apps.case.models import CommCareCase
-            return CommCareCase.wrap(self.__dict__['_data']).get_properties_in_api_format()
+            return CommCareCase.wrap(self._data).get_properties_in_api_format()
 
     @property
     def reverse_indices(self):
@@ -259,12 +245,3 @@ class ESCase(object):
     @property
     def xforms_by_xmlns(self):
         return _group_by_dict(self.get_forms(), lambda form: form.xmlns)
-
-    def __getattr__(self, name):
-        return self._data.get(name, None)
-
-    def __setattr__(self, name, value):
-        self.__dict__['_data'][name] = value
-
-    def to_dict(self):
-        return self._data
