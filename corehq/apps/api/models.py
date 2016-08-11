@@ -195,21 +195,24 @@ class ESCase(dict_object):
         return get_index_map([CommCareCaseIndex.wrap(index) for index in self.indices])
 
     def get_properties_in_api_format(self):
+        from casexml.apps.case.models import CommCareCase
+
         if self.case_json is not None:
-            return dict(self.case_json.items() + {
-                "external_id": self.external_id,
-                "owner_id": self.owner_id,
-                # renamed
-                "case_name": self.name,
-                # renamed
-                "case_type": self.type,
-                # renamed
-                "date_opened": self.opened_on,
-                # all custom properties go here
-            }.items())
+            dynamic_props = self.case_json
         else:
-            from casexml.apps.case.models import CommCareCase
-            return CommCareCase.wrap(self._data).get_properties_in_api_format()
+            dynamic_props = CommCareCase.wrap(self._data).dynamic_case_properties()
+
+        return dict(dynamic_props.items() + {
+            "external_id": self.external_id,
+            "owner_id": self.owner_id,
+            # renamed
+            "case_name": self.name,
+            # renamed
+            "case_type": self.type,
+            # renamed
+            "date_opened": self.opened_on,
+            # all custom properties go here
+        }.items())
 
     @property
     def reverse_indices(self):
