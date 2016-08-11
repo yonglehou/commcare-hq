@@ -167,7 +167,7 @@ class ESXFormInstance(object):
         return self._data
 
 
-def group_by_dict(objs, fn):
+def _group_by_dict(objs, fn):
     """
     Itertools.groupby returns a transient iterator with alien
     data types in it. This returns a dictionary of lists.
@@ -254,11 +254,11 @@ class ESCase(object):
 
     @property
     def xforms_by_name(self):
-        return group_by_dict(self.get_forms(), lambda form: form.name)
+        return _group_by_dict(self.get_forms(), lambda form: form.name)
 
     @property
     def xforms_by_xmlns(self):
-        return group_by_dict(self.get_forms(), lambda form: form.xmlns)
+        return _group_by_dict(self.get_forms(), lambda form: form.xmlns)
 
     def __getattr__(self, name):
         return self._data.get(name, None)
