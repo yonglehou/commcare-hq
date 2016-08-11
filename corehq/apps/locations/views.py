@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import messages
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.http.response import HttpResponseServerError
 from django.shortcuts import render
@@ -114,14 +115,47 @@ class LocationsListView(BaseLocationView):
 
         user = self.request.couch_user
         if user.has_permission(self.domain, 'access_all_locations'):
-            root_location = None
+            locs = filter_for_archived(
+                SQLLocation.objects.filter(domain=self.domain, parent_id=None),
+                self.show_inactive,
+            )
+            return [to_json(loc, True) for loc in locs]
         else:
-            root_location = user.get_location_id(self.domain)
-        locs = filter_for_archived(
-            SQLLocation.objects.filter(domain=self.domain, parent__location_id=root_location),
-            self.show_inactive,
-        )
-        return [to_json(loc, True) for loc in locs]
+            return [to_json(user.get_sql_location(self.domain), True)]
+
+
+def get_limited_location_tree(domain, limit=20):
+    """
+    Returns as many whole levels of locations as possible while staying under
+    the limit.  Will always return at least the first level.
+    """
+    def get_lt_levels_to_show():
+        all_lts = (LocationType.objects
+                   .filter(domain=domain)
+                   .annotate(num_locs=Count('sqllocation')))
+        ret = []
+        locs_count = 0
+        current_level = [lt for lt in all_lts if lt.parent_type_id is None]
+        while current_level and locs_count <= limit:
+            ret.append(current_level)
+            current_level = [lt for lt in all_lts if lt.parent_type in current_level]
+            locs_count += sum(lt.num_locs for lt in current_level)
+        return ret
+
+    # TODO just assemble all_locs into a tree
+    lt_levels = get_lt_levels_to_show()
+    from itertools import chain
+    lts = list(chain(*lt_levels))
+    all_locs = SQLLocation.objects.filter(domain=domain, location_type__in=lts)
+
+    ret = {}
+    for lt_level in lt_levels:
+        lt_ids = [lt.pk for lt in lt_level]
+        locs = [l.name for l in all_locs if l.location_type_id in lt_ids]
+        print locs
+        # for l in all_locs:
+        #     if l.location_type_id in lt_ids:
+        #         pass
 
 
 class LocationFieldsView(CustomDataModelMixin, BaseLocationView):

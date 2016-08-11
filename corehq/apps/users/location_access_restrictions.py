@@ -50,6 +50,10 @@ class ViewSafetyChecker(object):
         import loops) and memoized.
         """
         from corehq.apps.locations import views as location_views
+        from corehq.apps.locations.resources import v0_1 as location_api_v1
+        from corehq.apps.hqwebapp import views as hqwebapp_views
+        # Hmm, I might need to revisit this approach,
+        # maybe using url paths or something
         return {self._get_view_path(view_fn) for view_fn in (
             location_views.LocationsListView,
             location_views.archive_location,
@@ -58,16 +62,25 @@ class ViewSafetyChecker(object):
             # TODO still need to control reparenting in these two:
             # location_views.NewLocationView,
             # location_views.EditLocationView,
+            location_api_v1.InternalLocationResource,
+            hqwebapp_views.toggles_js,
         )}
 
     @memoized
     def _is_location_safe_path(self, view_path):
+        print view_path
+        print self._location_safe_views
+        print view_path in self._location_safe_views
         return view_path in self._location_safe_views
 
     def _get_view_path(self, view_fn):
         return '.'.join([view_fn.__module__, view_fn.__name__])
 
     def is_location_safe(self, view_fn):
+        from corehq.apps.locations.resources import v0_1 as location_api_v1
+        view1 = location_api_v1.InternalLocationResource
+        view2 = view_fn
+        # import ipdb; ipdb.set_trace()
         return self._is_location_safe_path(self._get_view_path(view_fn))
 
 

@@ -170,6 +170,7 @@ class LocationForm(forms.Form):
         return errors
 
     def clean_parent_id(self):
+        # TODO Check that the parent_id is under control
         if self.is_new_location:
             parent_id = self.location.parent_location_id
         else:

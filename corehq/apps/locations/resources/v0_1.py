@@ -1,4 +1,5 @@
 import json
+from django.http import HttpResponseForbidden
 from tastypie import fields
 from tastypie.resources import Resource
 
@@ -12,6 +13,7 @@ from corehq.util.quickcache import quickcache
 from dimagi.utils.decorators.memoized import memoized
 
 from ..models import Location, SQLLocation
+from ..permissions import user_can_access_location_id
 
 
 @quickcache(['user._id', 'project.name', 'only_editable'], timeout=10)
@@ -47,6 +49,14 @@ class LocationResource(HqBaseResource):
     is_archived = fields.BooleanField(attribute='is_archived', readonly=True)
     can_edit = fields.BooleanField(readonly=True)
     name = fields.CharField(attribute='name', readonly=True, unique=True)
+
+    # def _get_queryset(self, parent):
+    #     user = bundle.request.couch_user
+    #     if (
+    #         not user.has_permission(domain, 'access_all_locations')
+    #         and not user_can_access_location_id(kwargs['domain'], user, location_id)
+    #     ):
+    #         pass
 
     def obj_get(self, bundle, **kwargs):
         domain = kwargs['domain']
@@ -91,6 +101,9 @@ class InternalLocationResource(LocationResource):
 
     # using the default resource dispatch function to bypass our authorization for internal use
     def dispatch(self, request_type, request, **kwargs):
+        import ipdb; ipdb.set_trace()
+        # find the user and location
+        # HttpResponseForbidden
         return Resource.dispatch(self, request_type, request, **kwargs)
 
     class Meta(CustomResourceMeta):
