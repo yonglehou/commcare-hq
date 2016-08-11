@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _, ugettext_noop, ugettext_lazy
-from django.views.decorators.http import require_POST, require_http_methods
+from django.views.decorators.http import require_http_methods
 
 from couchdbkit import ResourceNotFound
 from corehq.apps.style.decorators import (
@@ -91,11 +91,9 @@ class LocationsListView(BaseLocationView):
 
     @property
     def page_context(self):
-        selected_id = self.request.GET.get('selected')
         has_location_types = len(self.domain_object.location_types) > 0
         loc_restricted = self.request.project.location_restriction_for_users
         return {
-            'selected_id': selected_id,
             'locations': load_locs_json(self.domain, selected_id, self.show_inactive, self.request.couch_user),
             'show_inactive': self.show_inactive,
             'has_location_types': has_location_types,
