@@ -11,7 +11,7 @@ from corehq.apps.api.resources.v0_1 import (
     CustomResourceMeta,
     RequirePermissionAuthentication,
 )
-from corehq.apps.api.util import get_object_or_not_exist, get_obj
+from corehq.apps.api.util import get_object_or_not_exist, get_obj, case_to_es_case
 from corehq.apps.cloudcare.api import (
     api_closed_to_status,
     get_filtered_cases,
@@ -51,7 +51,7 @@ class CommCareCaseResource(HqBaseResource, DomainSpecificResourceMixin):
 
     def obj_get(self, bundle, **kwargs):
         case = get_object_or_not_exist(CommCareCase, kwargs['pk'], kwargs['domain'])
-        return dict_object(case.to_api_json())
+        return case_to_es_case(case)
 
     def obj_get_list(self, bundle, domain, **kwargs):
         user_id = bundle.request.GET.get('user_id')

@@ -319,10 +319,11 @@ class CommCareCaseResource(CouchResourceMixin, HqBaseResource, DomainSpecificRes
     indices = fields.ListField(null=True)
 
     def dehydrate_properties(self, bundle):
-        return bundle.obj.to_api_json()['properties']
+        return bundle.obj.get_properties_in_api_format()
 
     def dehydrate_indices(self, bundle):
-        return bundle.obj.to_api_json()['indices']
+        from corehq.form_processor.abstract_models import get_index_map
+        return get_index_map(bundle.obj.indices)
 
     def obj_get(self, bundle, **kwargs):
         return get_object_or_not_exist(CommCareCase, kwargs['pk'],
