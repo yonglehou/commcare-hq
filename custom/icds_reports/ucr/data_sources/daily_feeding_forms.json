@@ -617,6 +617,52 @@
         "type": "expression"
       },
       {
+        "display_name": null,
+        "transform": { },
+        "datatype": "decimal",
+        "expression": {
+          "type": "split_string",
+          "string_expression": {
+            "type": "property_path",
+            "property_path": [
+              "form",
+              "gps_location"
+            ]
+          },
+          "index_expression": {
+            "type": "constant",
+            "constant": 0
+          }
+        },
+        "is_primary_key": false,
+        "is_nullable": true,
+        "column_id": "form_location_lat",
+        "type": "expression"
+      },
+      {
+        "display_name": null,
+        "transform": { },
+        "datatype": "decimal",
+        "expression": {
+          "type": "split_string",
+          "string_expression": {
+            "type": "property_path",
+            "property_path": [
+              "form",
+              "gps_location"
+            ]
+          },
+          "index_expression": {
+            "type": "constant",
+            "constant": 0
+          }
+        },
+        "is_primary_key": false,
+        "is_nullable": true,
+        "column_id": "form_location_long",
+        "type": "expression"
+      },
+      {
         "type": "boolean",
         "column_id": "awc_not_open_holiday",
         "filter": {
