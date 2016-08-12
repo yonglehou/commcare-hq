@@ -664,7 +664,7 @@
         "datatype": "integer",
         "is_primary_key": false,
         "is_nullable": true,
-        "column_id": "vhnd_num_mothers_6-12m"
+        "column_id": "vhnd_num_mothers_6_12"
       },
       {
         "expression": {
@@ -680,7 +680,7 @@
         "datatype": "integer",
         "is_primary_key": false,
         "is_nullable": true,
-        "column_id": "vhnd_num_mothers_12m"
+        "column_id": "vhnd_num_mothers_12"
       },
       {
         "expression": {

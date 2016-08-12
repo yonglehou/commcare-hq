@@ -505,7 +505,7 @@
         "type": "boolean"
       },
       {
-        "column_id": "tt_complete",
+        "column_id": "tetanus_complete",
         "display_name": null,
         "filter": {
           "type": "and",
@@ -567,7 +567,7 @@
         "type": "boolean"
       },
       {
-        "column_id": "anc1_received_by_delivery",
+        "column_id": "anc1_received_at_delivery",
         "display_name": null,
         "filter": {
           "type": "and",
@@ -594,7 +594,7 @@
         "type": "boolean"
       },
       {
-        "column_id": "anc2_received_by_delivery",
+        "column_id": "anc2_received_at_delivery",
         "display_name": null,
         "filter": {
           "type": "and",
@@ -621,7 +621,7 @@
         "type": "boolean"
       },
       {
-        "column_id": "anc3_received_by_delivery",
+        "column_id": "anc3_received_at_delivery",
         "display_name": null,
         "filter": {
           "type": "and",
@@ -648,7 +648,7 @@
         "type": "boolean"
       },
       {
-        "column_id": "anc4_received_by_delivery",
+        "column_id": "anc4_received_at_delivery",
         "display_name": null,
         "filter": {
           "type": "and",
@@ -697,7 +697,7 @@
         "type": "boolean"
       },
       {
-        "column_id": "ifa_consumed_last_seven",
+        "column_id": "ifa_consumed_last_seven_days",
         "display_name": null,
         "filter": {
           "type": "and",
@@ -858,7 +858,7 @@
         "type": "boolean"
       },
       {
-        "column_id": "counsel_play_birth_preparedness_vid",
+        "column_id": "counsel_bp_vid",
         "display_name": null,
         "filter": {
           "type": "and",
@@ -904,7 +904,7 @@
         "type": "boolean"
       },
       {
-        "column_id": "counsel_play_fp_vid",
+        "column_id": "counsel_fp_vid",
         "display_name": null,
         "filter": {
           "type": "and",

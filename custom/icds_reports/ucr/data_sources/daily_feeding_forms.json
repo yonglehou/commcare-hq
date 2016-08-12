@@ -588,7 +588,7 @@
       },
       {
         "display_name": null,
-        "column_id": "attendance_not",
+        "column_id": "attendance_non",
         "type": "boolean",
         "filter": {
           "type": "boolean_expression",
