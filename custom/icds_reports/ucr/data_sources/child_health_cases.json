@@ -65,7 +65,7 @@
       },
       {
         "display_name": null,
-        "property_path": [],
+        "property_path": [ ],
         "datatype": "datetime",
         "is_primary_key": false,
         "column_id": "closed_on",
@@ -85,7 +85,7 @@
             "property_name": "closed"
           },
           "type": "boolean_expression",
-          "property_value": false
+          "property_value": true
         }
       },
       {
