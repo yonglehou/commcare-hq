@@ -23,13 +23,30 @@
     "configured_indicators": [
       {
         "display_name": null,
-        "property_path": [],
+        "property_path": [ ],
         "datatype": "string",
         "is_primary_key": false,
         "is_nullable": false,
         "column_id": "owner_id",
         "type": "raw",
         "property_name": "owner_id"
+      },
+      {
+        "display_name": null,
+        "datatype": "string",
+        "expression": {
+          "expression": {
+            "datatype": null,
+            "type": "property_name",
+            "property_name": "case_id"
+          },
+          "type": "root_doc"
+        },
+        "transform": { },
+        "is_nullable": false,
+        "is_primary_key": true,
+        "column_id": "case_id",
+        "type": "expression"
       },
       {
         "display_name": null,
@@ -183,13 +200,35 @@
       },
       {
         "display_name": "Last Modified",
-        "property_path": [],
+        "property_path": [ ],
         "datatype": "datetime",
         "is_primary_key": false,
         "column_id": "modified_on",
         "is_nullable": true,
         "type": "raw",
         "property_name": "modified_on"
+      },
+      {
+        "display_name": null,
+        "transform": {},
+        "datatype": "string",
+        "type": "expression",
+        "is_primary_key": false,
+        "is_nullable": true,
+        "column_id": "name",
+        "expression": {
+          "value_expression": {
+            "datatype": null,
+            "type": "property_name",
+            "property_name": "name"
+          },
+          "type": "related_doc",
+          "related_doc_type": "CommCareCase",
+          "doc_id_expression": {
+            "type": "named",
+            "name": "parent_id"
+          }
+        }
       },
       {
         "display_name": null,

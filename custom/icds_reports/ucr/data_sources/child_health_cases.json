@@ -111,7 +111,7 @@
         },
         "transform": { },
         "is_nullable": false,
-        "is_primary_key": false,
+        "is_primary_key": true,
         "column_id": "case_id",
         "type": "expression"
       },
@@ -546,7 +546,7 @@
       {
         "display_name": null,
         "property_path": [],
-        "datatype": "string",
+        "datatype": "decimal",
         "is_primary_key": false,
         "is_nullable": true,
         "column_id": "birth_weight",
@@ -1112,7 +1112,7 @@
       },
       {
         "display_name": null,
-        "transform": {},
+        "transform": { },
         "datatype": "string",
         "type": "expression",
         "is_primary_key": false,
@@ -1135,6 +1135,28 @@
       {
         "display_name": null,
         "transform": {},
+        "datatype": "string",
+        "type": "expression",
+        "is_primary_key": false,
+        "is_nullable": true,
+        "column_id": "name",
+        "expression": {
+          "value_expression": {
+            "datatype": null,
+            "type": "property_name",
+            "property_name": "name"
+          },
+          "type": "related_doc",
+          "related_doc_type": "CommCareCase",
+          "doc_id_expression": {
+            "type": "named",
+            "name": "parent_id"
+          }
+        }
+      },
+      {
+        "display_name": null,
+        "transform": { },
         "datatype": "string",
         "type": "expression",
         "is_primary_key": false,
@@ -1166,20 +1188,6 @@
           "datatype": null,
           "type": "property_name",
           "property_name": "breastfed_within_first"
-        }
-      },
-      {
-        "display_name": null,
-        "transform": {},
-        "datatype": "string",
-        "type": "expression",
-        "is_primary_key": false,
-        "is_nullable": true,
-        "column_id": "cf_demo",
-        "expression": {
-          "datatype": null,
-          "type": "property_name",
-          "property_name": "cf_demo"
         }
       },
       {
