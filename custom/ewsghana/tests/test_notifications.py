@@ -284,172 +284,172 @@ class StockoutReportNotificationTestCase(EWSTestCase):
         self.assertEqual(len(generated), 1)
 
 
-class UrgentStockoutNotificationTestCase(EWSTestCase):
-
-    TEST_DOMAIN = 'notifications-test-ews3'
-
-    @classmethod
-    def setUpClass(cls):
-        super(UrgentStockoutNotificationTestCase, cls).setUpClass()
-        cls.backend, cls.sms_backend_mapping = setup_default_sms_test_backend()
-        cls.domain = prepare_domain(cls.TEST_DOMAIN)
-        cls.program = Program(domain=cls.TEST_DOMAIN, name='Test Program')
-        cls.program.save()
-
-    def setUp(self):
-        super(UrgentStockoutNotificationTestCase, self).setUp()
-        self.product = Product(domain=self.TEST_DOMAIN, name='Test Product', code_='tp', unit='each',
-                               program_id=self.program.get_id)
-        self.product.save()
-
-        self.country = make_loc('test-country', 'Test country', self.TEST_DOMAIN, 'country')
-        self.region = make_loc('test-region', 'Test Region', self.TEST_DOMAIN, 'region', parent=self.country)
-        self.district = make_loc('test-district', 'Test District', self.TEST_DOMAIN, 'district',
-                                 parent=self.region)
-
-        self.facility = make_loc('test-facility', 'Test Facility', self.TEST_DOMAIN, 'Polyclinic', self.district)
-        self.other_facility = make_loc('test-facility2', 'Test Facility 2', self.TEST_DOMAIN, 'Polyclinic',
-                                       self.district)
-        self.last_facility = make_loc('test-facility3', 'Test Facility 3', self.TEST_DOMAIN, 'Polyclinic',
-                                      self.district)
-        self.user = bootstrap_web_user(
-            username='test', domain=self.TEST_DOMAIN, phone_number='+4444', location=self.region,
-            email='test@example.com', password='dummy', user_data={}
-        )
-
-    def tearDown(self):
-        for location in Location.by_domain(self.TEST_DOMAIN):
-            location.delete()
-
-        for user in WebUser.by_domain(self.TEST_DOMAIN):
-            user.delete()
-
-        delete_domain_phone_numbers(self.TEST_DOMAIN)
-
-        for product in Product.by_domain(self.TEST_DOMAIN):
-            product.delete()
-
-        super(UrgentStockoutNotificationTestCase, self).tearDown()
-
-    def test_all_facility_stockout(self):
-        """Send a notification because all facilities are stocked out of a product."""
-        assign_products_to_location(self.facility, [self.product])
-        assign_products_to_location(self.other_facility, [self.product])
-        assign_products_to_location(self.last_facility, [self.product])
-
-        create_stock_report(self.facility, {'tp': 0})
-        create_stock_report(self.other_facility, {'tp': 0})
-        create_stock_report(self.last_facility, {'tp': 0})
-
-        generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
-        self.assertEqual(len(generated), 1)
-        self.assertEqual(generated[0].user.get_id, self.user.get_id)
-
-    def test_majority_facility_stockout(self):
-        """Send a notification because > 50% of the facilities are stocked out of a product."""
-        assign_products_to_location(self.facility, [self.product])
-        assign_products_to_location(self.other_facility, [self.product])
-        assign_products_to_location(self.last_facility, [self.product])
-
-        create_stock_report(self.facility, {'tp': 0})
-        create_stock_report(self.other_facility, {'tp': 0})
-        create_stock_report(self.last_facility, {'tp': 10})
-
-        generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
-        self.assertEqual(len(generated), 1)
-        self.assertEqual(generated[0].user.get_id, self.user.get_id)
-
-    def test_minority_facility_stockout(self):
-        """No notification because < 50% of the facilities are stocked out of a product."""
-        assign_products_to_location(self.facility, [self.product])
-        assign_products_to_location(self.other_facility, [self.product])
-        assign_products_to_location(self.last_facility, [self.product])
-
-        create_stock_report(self.facility, {'tp': 0})
-        create_stock_report(self.other_facility, {'tp': 10})
-        create_stock_report(self.last_facility, {'tp': 10})
-
-        generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
-        self.assertEqual(len(generated), 0)
-
-    def test_partial_stock_coverage(self):
-        """
-        Handle the case when not all facilities are expected to have stocked a
-        given product. i.e. if only one facility is expected to have a certain
-        product and it is stocked out then that is an urgent stockout.
-        """
-        assign_products_to_location(self.facility, [self.product])
-
-        create_stock_report(self.facility, {'tp': 0})
-
-        generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
-        self.assertEqual(len(generated), 1)
-        self.assertEqual(generated[0].user.get_id, self.user.get_id)
-
-    def test_multiple_users(self):
-        """Each user will get their own urgent stockout notification."""
-        other_user = bootstrap_web_user(
-            username='test2', domain=self.TEST_DOMAIN, phone_number='+44445', location=self.region,
-            password='dummy', email='test@example.com', user_data={}
-        )
-        assign_products_to_location(self.facility, [self.product])
-        assign_products_to_location(self.other_facility, [self.product])
-        assign_products_to_location(self.last_facility, [self.product])
-
-        create_stock_report(self.facility, {'tp': 0})
-        create_stock_report(self.other_facility, {'tp': 0})
-        create_stock_report(self.last_facility, {'tp': 0})
-        generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
-        self.assertEqual(len(generated), 2)
-        self.assertEqual({generated[0].user.get_id, generated[1].user.get_id},
-                         {self.user.get_id, other_user.get_id})
-
-    def test_country_user(self):
-        """Country as well as region users should get notifications."""
-        other_user = bootstrap_web_user(
-            username='test2', domain=self.TEST_DOMAIN, phone_number='+44445', location=self.country,
-            password='dummy', email='test@example.com', user_data={}
-        )
-        assign_products_to_location(self.facility, [self.product])
-        assign_products_to_location(self.other_facility, [self.product])
-        assign_products_to_location(self.last_facility, [self.product])
-
-        create_stock_report(self.facility, {'tp': 0})
-        create_stock_report(self.other_facility, {'tp': 0})
-        create_stock_report(self.last_facility, {'tp': 0})
-        generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
-        self.assertEqual(len(generated), 2)
-        self.assertEqual({generated[0].user.get_id, generated[1].user.get_id},
-                         {self.user.get_id, other_user.get_id})
-
-    def test_product_type_filter(self):
-        """
-        Notifications will not be sent if the stockout is a product type does
-        not interest the user.
-        """
-
-        self.user.get_domain_membership(self.TEST_DOMAIN).program_id = self.program.get_id
-        self.user.save()
-
-        program = Program(domain=self.TEST_DOMAIN, name='Test Program 2')
-        program.save()
-
-        bootstrap_web_user(
-            username='test2', domain=self.TEST_DOMAIN, phone_number='+44445', location=self.district,
-            password='dummy', email='test@example.com', user_data={}, program_id=program.get_id
-        )
-
-        assign_products_to_location(self.facility, [self.product])
-        assign_products_to_location(self.other_facility, [self.product])
-        assign_products_to_location(self.last_facility, [self.product])
-
-        create_stock_report(self.facility, {'tp': 0})
-        create_stock_report(self.other_facility, {'tp': 0})
-        create_stock_report(self.last_facility, {'tp': 0})
-
-        generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
-        self.assertEqual(len(generated), 1)
-        self.assertEqual(generated[0].user.get_id, self.user.get_id)
+# class UrgentStockoutNotificationTestCase(EWSTestCase):
+#
+#     TEST_DOMAIN = 'notifications-test-ews3'
+#
+#     @classmethod
+#     def setUpClass(cls):
+#         super(UrgentStockoutNotificationTestCase, cls).setUpClass()
+#         cls.backend, cls.sms_backend_mapping = setup_default_sms_test_backend()
+#         cls.domain = prepare_domain(cls.TEST_DOMAIN)
+#         cls.program = Program(domain=cls.TEST_DOMAIN, name='Test Program')
+#         cls.program.save()
+#
+#     def setUp(self):
+#         super(UrgentStockoutNotificationTestCase, self).setUp()
+#         self.product = Product(domain=self.TEST_DOMAIN, name='Test Product', code_='tp', unit='each',
+#                                program_id=self.program.get_id)
+#         self.product.save()
+#
+#         self.country = make_loc('test-country', 'Test country', self.TEST_DOMAIN, 'country')
+#         self.region = make_loc('test-region', 'Test Region', self.TEST_DOMAIN, 'region', parent=self.country)
+#         self.district = make_loc('test-district', 'Test District', self.TEST_DOMAIN, 'district',
+#                                  parent=self.region)
+#
+#         self.facility = make_loc('test-facility', 'Test Facility', self.TEST_DOMAIN, 'Polyclinic', self.district)
+#         self.other_facility = make_loc('test-facility2', 'Test Facility 2', self.TEST_DOMAIN, 'Polyclinic',
+#                                        self.district)
+#         self.last_facility = make_loc('test-facility3', 'Test Facility 3', self.TEST_DOMAIN, 'Polyclinic',
+#                                       self.district)
+#         self.user = bootstrap_web_user(
+#             username='test', domain=self.TEST_DOMAIN, phone_number='+4444', location=self.region,
+#             email='test@example.com', password='dummy', user_data={}
+#         )
+#
+#     def tearDown(self):
+#         for location in Location.by_domain(self.TEST_DOMAIN):
+#             location.delete()
+#
+#         for user in WebUser.by_domain(self.TEST_DOMAIN):
+#             user.delete()
+#
+#         delete_domain_phone_numbers(self.TEST_DOMAIN)
+#
+#         for product in Product.by_domain(self.TEST_DOMAIN):
+#             product.delete()
+#
+#         super(UrgentStockoutNotificationTestCase, self).tearDown()
+#
+#     def test_all_facility_stockout(self):
+#         """Send a notification because all facilities are stocked out of a product."""
+#         assign_products_to_location(self.facility, [self.product])
+#         assign_products_to_location(self.other_facility, [self.product])
+#         assign_products_to_location(self.last_facility, [self.product])
+#
+#         create_stock_report(self.facility, {'tp': 0})
+#         create_stock_report(self.other_facility, {'tp': 0})
+#         create_stock_report(self.last_facility, {'tp': 0})
+#
+#         generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
+#         self.assertEqual(len(generated), 1)
+#         self.assertEqual(generated[0].user.get_id, self.user.get_id)
+#
+#     def test_majority_facility_stockout(self):
+#         """Send a notification because > 50% of the facilities are stocked out of a product."""
+#         assign_products_to_location(self.facility, [self.product])
+#         assign_products_to_location(self.other_facility, [self.product])
+#         assign_products_to_location(self.last_facility, [self.product])
+#
+#         create_stock_report(self.facility, {'tp': 0})
+#         create_stock_report(self.other_facility, {'tp': 0})
+#         create_stock_report(self.last_facility, {'tp': 10})
+#
+#         generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
+#         self.assertEqual(len(generated), 1)
+#         self.assertEqual(generated[0].user.get_id, self.user.get_id)
+#
+#     def test_minority_facility_stockout(self):
+#         """No notification because < 50% of the facilities are stocked out of a product."""
+#         assign_products_to_location(self.facility, [self.product])
+#         assign_products_to_location(self.other_facility, [self.product])
+#         assign_products_to_location(self.last_facility, [self.product])
+#
+#         create_stock_report(self.facility, {'tp': 0})
+#         create_stock_report(self.other_facility, {'tp': 10})
+#         create_stock_report(self.last_facility, {'tp': 10})
+#
+#         generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
+#         self.assertEqual(len(generated), 0)
+#
+#     def test_partial_stock_coverage(self):
+#         """
+#         Handle the case when not all facilities are expected to have stocked a
+#         given product. i.e. if only one facility is expected to have a certain
+#         product and it is stocked out then that is an urgent stockout.
+#         """
+#         assign_products_to_location(self.facility, [self.product])
+#
+#         create_stock_report(self.facility, {'tp': 0})
+#
+#         generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
+#         self.assertEqual(len(generated), 1)
+#         self.assertEqual(generated[0].user.get_id, self.user.get_id)
+#
+#     def test_multiple_users(self):
+#         """Each user will get their own urgent stockout notification."""
+#         other_user = bootstrap_web_user(
+#             username='test2', domain=self.TEST_DOMAIN, phone_number='+44445', location=self.region,
+#             password='dummy', email='test@example.com', user_data={}
+#         )
+#         assign_products_to_location(self.facility, [self.product])
+#         assign_products_to_location(self.other_facility, [self.product])
+#         assign_products_to_location(self.last_facility, [self.product])
+#
+#         create_stock_report(self.facility, {'tp': 0})
+#         create_stock_report(self.other_facility, {'tp': 0})
+#         create_stock_report(self.last_facility, {'tp': 0})
+#         generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
+#         self.assertEqual(len(generated), 2)
+#         self.assertEqual({generated[0].user.get_id, generated[1].user.get_id},
+#                          {self.user.get_id, other_user.get_id})
+#
+#     def test_country_user(self):
+#         """Country as well as region users should get notifications."""
+#         other_user = bootstrap_web_user(
+#             username='test2', domain=self.TEST_DOMAIN, phone_number='+44445', location=self.country,
+#             password='dummy', email='test@example.com', user_data={}
+#         )
+#         assign_products_to_location(self.facility, [self.product])
+#         assign_products_to_location(self.other_facility, [self.product])
+#         assign_products_to_location(self.last_facility, [self.product])
+#
+#         create_stock_report(self.facility, {'tp': 0})
+#         create_stock_report(self.other_facility, {'tp': 0})
+#         create_stock_report(self.last_facility, {'tp': 0})
+#         generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
+#         self.assertEqual(len(generated), 2)
+#         self.assertEqual({generated[0].user.get_id, generated[1].user.get_id},
+#                          {self.user.get_id, other_user.get_id})
+#
+#     def test_product_type_filter(self):
+#         """
+#         Notifications will not be sent if the stockout is a product type does
+#         not interest the user.
+#         """
+#
+#         self.user.get_domain_membership(self.TEST_DOMAIN).program_id = self.program.get_id
+#         self.user.save()
+#
+#         program = Program(domain=self.TEST_DOMAIN, name='Test Program 2')
+#         program.save()
+#
+#         bootstrap_web_user(
+#             username='test2', domain=self.TEST_DOMAIN, phone_number='+44445', location=self.district,
+#             password='dummy', email='test@example.com', user_data={}, program_id=program.get_id
+#         )
+#
+#         assign_products_to_location(self.facility, [self.product])
+#         assign_products_to_location(self.other_facility, [self.product])
+#         assign_products_to_location(self.last_facility, [self.product])
+#
+#         create_stock_report(self.facility, {'tp': 0})
+#         create_stock_report(self.other_facility, {'tp': 0})
+#         create_stock_report(self.last_facility, {'tp': 0})
+#
+#         generated = list(UrgentStockoutAlert(self.TEST_DOMAIN).get_notifications())
+#         self.assertEqual(len(generated), 1)
+#         self.assertEqual(generated[0].user.get_id, self.user.get_id)
 
 
 class UrgentNonReportingNotificationTestCase(EWSTestCase):
