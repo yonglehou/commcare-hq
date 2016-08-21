@@ -2,6 +2,8 @@ import uuid
 from django.test import TestCase
 from casexml.apps.case.mock import CaseBlock
 from casexml.apps.case.util import post_case_blocks
+from nose.tools import nottest
+
 from corehq.apps.users.models import CommCareUser
 from corehq.apps.users.util import format_username
 from corehq.apps.domain.shortcuts import create_domain
@@ -118,6 +120,7 @@ class VscanTests(UTHTests):
 
         return packed_directory
 
+    @nottest
     def testAttachments(self):
         self.assertEqual(len(CommCareCase.get(self.case_id).case_attachments), 0)
         scan_path = os.path.join(
