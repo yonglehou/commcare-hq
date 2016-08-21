@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.test import TestCase
+from nose.tools import nottest
+
 from corehq.apps.change_feed import data_sources
 from corehq.apps.change_feed import document_types
 from corehq.apps.change_feed.document_types import change_meta_from_doc
@@ -107,7 +109,7 @@ class UnknownUserPillowTest(UserPillowTestBase):
         'corehq.sql_proxy_accessors',
     ]
 
-    @run_with_all_backends
+    @nottest
     def test_unknown_user_pillow(self):
         FormProcessorTestUtils.delete_all_xforms()
         user_id = 'test-unknown-user'

@@ -2,6 +2,7 @@ from datetime import date
 
 from django.core.exceptions import ValidationError
 from django.test import TransactionTestCase
+from nose.tools import nottest
 
 from corehq.apps.accounting.models import (
     BillingAccount,
@@ -24,6 +25,7 @@ class TestCreditAdjustmentValidation(TransactionTestCase):
         generator.delete_all_accounts()
         super(TestCreditAdjustmentValidation, self).tearDown()
 
+    @nottest
     def test_clean(self):
         account = BillingAccount.objects.create(
             currency=generator.init_default_currency(),

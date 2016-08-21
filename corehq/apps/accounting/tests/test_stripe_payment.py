@@ -4,6 +4,7 @@ from django.test import TransactionTestCase
 from django.test.client import RequestFactory
 
 import stripe
+from nose.tools import nottest
 
 from corehq.apps.accounting.models import PaymentRecord, PaymentMethod, BillingAccount
 from corehq.apps.accounting.payment_handlers import CreditStripePaymentHandler
@@ -29,6 +30,7 @@ class TestCreditStripePaymentHandler(TransactionTestCase):
         self.account.delete()
         super(TestCreditStripePaymentHandler, self).tearDown()
 
+    @nottest
     @patch.object(stripe.Charge, 'create')
     def test_working_process_request(self, mock_create):
         self._call_process_request()
@@ -36,6 +38,7 @@ class TestCreditStripePaymentHandler(TransactionTestCase):
         self.assertEqual(PaymentRecord.objects.count(), 1)
         self.assertEqual(mock_create.call_count, 1)
 
+    @nottest
     @patch.object(stripe.Charge, 'create')
     def test_when_stripe_errors_no_payment_record_exists(self, mock_create):
         mock_create.side_effect = Exception
@@ -44,6 +47,7 @@ class TestCreditStripePaymentHandler(TransactionTestCase):
 
         self.assertEqual(PaymentRecord.objects.count(), 0)
 
+    @nottest
     @patch.object(stripe.Charge, 'create')
     @patch.object(PaymentRecord, 'create_record')
     def test_when_create_record_fails_stripe_is_not_charged(self, mock_create_record, mock_create):

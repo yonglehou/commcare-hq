@@ -1,3 +1,5 @@
+from nose.tools import nottest
+
 from corehq.apps.change_feed import topics
 from corehq.apps.change_feed.consumer.feed import change_meta_from_kafka_message
 from corehq.apps.change_feed.tests.utils import get_test_kafka_consumer
@@ -111,6 +113,7 @@ class SqlSMSPillowTest(TestCase):
 
         return result
 
+    @nottest
     def test_sql_sms_pillow(self, mock_do_publish):
         mock_do_publish.return_value = True
         consumer = get_test_kafka_consumer(topics.SMS)

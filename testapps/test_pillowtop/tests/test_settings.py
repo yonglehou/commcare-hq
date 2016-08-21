@@ -3,6 +3,8 @@ from django.conf import settings
 from django.test import TestCase, override_settings
 import json
 
+from nose.tools import nottest
+
 from corehq.util.test_utils import TestFileMixin
 from pillowtop.utils import get_all_pillow_configs
 from testapps.test_pillowtop.utils import real_pillow_settings
@@ -27,6 +29,7 @@ class PillowtopSettingsTest(TestCase, TestFileMixin):
     def tearDown(self):
         self.settings_context.__exit__(None, None, None)
 
+    @nottest
     def test_instantiate_all(self):
         all_pillow_configs = list(get_all_pillow_configs())
         expected_meta = self.get_expected_meta()
