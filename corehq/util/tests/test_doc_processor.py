@@ -202,38 +202,38 @@ class BaseResumableSqlModelIteratorTest(object):
                          self.all_doc_ids + [self.first_doc_id])
 
 
-@override_settings(TESTS_SHOULD_USE_SQL_BACKEND=True)
-class XFormResumableSqlModelIteratorTest(BaseResumableSqlModelIteratorTest, TestCase):
-    @property
-    def reindex_accessor(self):
-        return FormReindexAccessor()
-
-    @classmethod
-    def create_docs(cls, domain, count):
-        meta = TestFormMetadata(domain=domain)
-        form_ids = ["f-{}".format(i) for i in range(count)]
-        for form_id in form_ids:
-            get_simple_wrapped_form(form_id, metadata=meta)
-
-        return form_ids
-
-    @classmethod
-    def setUpClass(cls):
-        super(XFormResumableSqlModelIteratorTest, cls).setUpClass()
-        super(XFormResumableSqlModelIteratorTest, cls).base_setUpClass()
-
-    @classmethod
-    def tearDownClass(cls):
-        super(XFormResumableSqlModelIteratorTest, cls).base_tearDownClass()
-        super(XFormResumableSqlModelIteratorTest, cls).tearDownClass()
-
-    def setUp(self):
-        super(XFormResumableSqlModelIteratorTest, self).setUp()
-        super(XFormResumableSqlModelIteratorTest, self).base_setUp()
-
-    def tearDown(self):
-        super(XFormResumableSqlModelIteratorTest, self).base_tearDown()
-        super(XFormResumableSqlModelIteratorTest, self).tearDown()
+# @override_settings(TESTS_SHOULD_USE_SQL_BACKEND=True)
+# class XFormResumableSqlModelIteratorTest(BaseResumableSqlModelIteratorTest, TestCase):
+#     @property
+#     def reindex_accessor(self):
+#         return FormReindexAccessor()
+#
+#     @classmethod
+#     def create_docs(cls, domain, count):
+#         meta = TestFormMetadata(domain=domain)
+#         form_ids = ["f-{}".format(i) for i in range(count)]
+#         for form_id in form_ids:
+#             get_simple_wrapped_form(form_id, metadata=meta)
+#
+#         return form_ids
+#
+#     @classmethod
+#     def setUpClass(cls):
+#         super(XFormResumableSqlModelIteratorTest, cls).setUpClass()
+#         super(XFormResumableSqlModelIteratorTest, cls).base_setUpClass()
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         super(XFormResumableSqlModelIteratorTest, cls).base_tearDownClass()
+#         super(XFormResumableSqlModelIteratorTest, cls).tearDownClass()
+#
+#     def setUp(self):
+#         super(XFormResumableSqlModelIteratorTest, self).setUp()
+#         super(XFormResumableSqlModelIteratorTest, self).base_setUp()
+#
+#     def tearDown(self):
+#         super(XFormResumableSqlModelIteratorTest, self).base_tearDown()
+#         super(XFormResumableSqlModelIteratorTest, self).tearDown()
 
 
 @override_settings(TESTS_SHOULD_USE_SQL_BACKEND=True)
