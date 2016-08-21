@@ -2,6 +2,7 @@ import mock
 from collections import namedtuple
 from django.test import TestCase, SimpleTestCase
 
+from corehq.apps.accounting.models import Currency
 from corehq.apps.export.models import (
     ExportItem,
     StockItem,
@@ -373,6 +374,7 @@ class TestExportInstanceFromSavedInstance(TestCase):
         )
 
     def test_export_instance_from_saved(self, _):
+        Currency.get_default()
         """This test ensures that when we build from a saved export instance that the selection that a user
         makes is still there"""
         first_non_system_property = len(TOP_MAIN_FORM_TABLE_PROPERTIES)
