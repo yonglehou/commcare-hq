@@ -142,6 +142,7 @@ class TestConvertBase(TestCase, TestFileMixin):
     domain = 'convert-domain'
 
     def setUp(self):
+        super(TestConvertBase, self).setUp()
         delete_all_export_instances()
 
     def _convert_form_export(self, export_file_name):
