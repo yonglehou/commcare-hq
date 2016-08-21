@@ -1,4 +1,6 @@
 from django.test import TestCase
+from nose.tools import nottest
+
 from corehq.apps.change_feed import data_sources
 from corehq.apps.change_feed import document_types
 from corehq.apps.change_feed.document_types import change_meta_from_doc
@@ -37,6 +39,7 @@ class DomainPillowTest(TestCase):
         ensure_index_deleted(self.index_info.index)
         super(DomainPillowTest, self).tearDown()
 
+    @nottest
     def test_kafka_domain_pillow(self):
         # make a domain
         domain_name = 'domain-pillowtest-kafka'
@@ -55,6 +58,7 @@ class DomainPillowTest(TestCase):
         # verify there
         self._verify_domain_in_es(domain_name)
 
+    @nottest
     def test_kafka_domain_pillow_deletions(self):
         # run the other test to ensure domain is created and in ES
         self.test_kafka_domain_pillow()
