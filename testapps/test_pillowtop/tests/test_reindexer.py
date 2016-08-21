@@ -138,31 +138,31 @@ class CheckpointCreationTest(TestCase):
     pass
 
 
-@generate_cases([
-    ('app', 'ApplicationToElasticsearchPillow'),
-    ('case', 'CaseToElasticsearchPillow'),
-    ('form', 'XFormToElasticsearchPillow'),
-    ('domain', 'KafkaDomainPillow'),
-    ('user', 'UserPillow'),
-    ('group', 'GroupPillow'),
-    ('ledger-v1', 'LedgerToElasticsearchPillow'),
-    ('sms', 'SqlSMSPillow'),
-    ('report-case', 'ReportCaseToElasticsearchPillow'),
-    ('report-xform', 'ReportXFormToElasticsearchPillow'),
-], CheckpointCreationTest)
-def test_checkpoint_creation(self, reindex_id, pillow_name):
-    with real_pillow_settings():
-        pillow = get_pillow_by_name(pillow_name)
-        random_seq = uuid.uuid4().hex
-        pillow.checkpoint.update_to(random_seq)
-        self.assertEqual(random_seq, pillow.checkpoint.get_current_sequence_id())
-        call_command('ptop_reindexer_v2', reindex_id, cleanup=True, noinput=True)
-        pillow = get_pillow_by_name(pillow_name)
-        self.assertNotEqual(random_seq, pillow.checkpoint.get_current_sequence_id())
-        self.assertEqual(
-            str(pillow.get_change_feed().get_checkpoint_value()),
-            pillow.checkpoint.get_current_sequence_id(),
-        )
+# @generate_cases([
+#     ('app', 'ApplicationToElasticsearchPillow'),
+#     ('case', 'CaseToElasticsearchPillow'),
+#     ('form', 'XFormToElasticsearchPillow'),
+#     ('domain', 'KafkaDomainPillow'),
+#     ('user', 'UserPillow'),
+#     ('group', 'GroupPillow'),
+#     ('ledger-v1', 'LedgerToElasticsearchPillow'),
+#     ('sms', 'SqlSMSPillow'),
+#     ('report-case', 'ReportCaseToElasticsearchPillow'),
+#     ('report-xform', 'ReportXFormToElasticsearchPillow'),
+# ], CheckpointCreationTest)
+# def test_checkpoint_creation(self, reindex_id, pillow_name):
+#     with real_pillow_settings():
+#         pillow = get_pillow_by_name(pillow_name)
+#         random_seq = uuid.uuid4().hex
+#         pillow.checkpoint.update_to(random_seq)
+#         self.assertEqual(random_seq, pillow.checkpoint.get_current_sequence_id())
+#         call_command('ptop_reindexer_v2', reindex_id, cleanup=True, noinput=True)
+#         pillow = get_pillow_by_name(pillow_name)
+#         self.assertNotEqual(random_seq, pillow.checkpoint.get_current_sequence_id())
+#         self.assertEqual(
+#             str(pillow.get_change_feed().get_checkpoint_value()),
+#             pillow.checkpoint.get_current_sequence_id(),
+#         )
 
 
 # @generate_cases([
