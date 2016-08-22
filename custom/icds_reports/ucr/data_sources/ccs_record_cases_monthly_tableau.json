@@ -1935,7 +1935,7 @@
                   ]
                 },
                 {
-                  "operator": "gt",
+                  "operator": "gte",
                   "type": "boolean_expression",
                   "expression": {
                     "type": "diff_days",
@@ -1960,7 +1960,7 @@
                           }
                         }
                       },
-                      "type": "month_end_date"
+                      "type": "month_start_date"
                     },
                     "to_date_expression": {
                       "value_expression": {
@@ -2637,7 +2637,7 @@
             ]
           },
           {
-            "operator": "gt",
+            "operator": "gte",
             "type": "boolean_expression",
             "expression": {
               "type": "diff_days",
@@ -2662,7 +2662,7 @@
                     }
                   }
                 },
-                "type": "month_end_date"
+                "type": "month_start_date"
               },
               "to_date_expression": {
                 "value_expression": {
@@ -2873,7 +2873,7 @@
                 ]
               },
               {
-                "operator": "gt",
+                "operator": "gte",
                 "type": "boolean_expression",
                 "expression": {
                   "type": "diff_days",
@@ -2898,7 +2898,7 @@
                         }
                       }
                     },
-                    "type": "month_end_date"
+                    "type": "month_start_date"
                   },
                   "to_date_expression": {
                     "value_expression": {
@@ -3208,7 +3208,7 @@
                 ]
               },
               {
-                "operator": "gt",
+                "operator": "gte",
                 "type": "boolean_expression",
                 "expression": {
                   "type": "diff_days",
@@ -3233,7 +3233,7 @@
                         }
                       }
                     },
-                    "type": "month_end_date"
+                    "type": "month_start_date"
                   },
                   "to_date_expression": {
                     "value_expression": {
@@ -3824,7 +3824,7 @@
                     ]
                   },
                   {
-                    "operator": "gt",
+                    "operator": "gte",
                     "type": "boolean_expression",
                     "expression": {
                       "type": "diff_days",
@@ -3849,7 +3849,7 @@
                             }
                           }
                         },
-                        "type": "month_end_date"
+                        "type": "month_start_date"
                       },
                       "to_date_expression": {
                         "value_expression": {
