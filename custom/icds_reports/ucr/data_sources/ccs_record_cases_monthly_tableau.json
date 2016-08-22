@@ -1220,7 +1220,7 @@
             "expression": {
               "datatype": null,
               "type": "property_name",
-              "property_name": "server_modified_on"
+              "property_name": "modified_on"
             }
           },
           "type": "add_months",
@@ -1308,7 +1308,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -1358,7 +1358,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -1509,7 +1509,7 @@
             "expression": {
               "datatype": null,
               "type": "property_name",
-              "property_name": "server_modified_on"
+              "property_name": "modified_on"
             }
           },
           "type": "add_months",
@@ -1801,7 +1801,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -1829,12 +1829,12 @@
                       "expression": {
                         "type": "root_doc",
                         "expression": {
-                          "datatype": null,
+                          "datatype": "string",
                           "type": "property_name",
                           "property_name": "closed"
                         }
                       },
-                      "property_value": false
+                      "property_value": "False"
                     },
                     {
                       "operator": "gte",
@@ -1848,7 +1848,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -1865,9 +1865,12 @@
                           "type": "month_start_date"
                         },
                         "to_date_expression": {
-                          "datatype": "date",
-                          "type": "property_name",
-                          "property_name": "closed_on"
+                          "type": "root_doc",
+                          "expression": {
+                            "datatype": "date",
+                            "type": "property_name",
+                            "property_name": "closed_on"
+                          }
                         }
                       },
                       "property_value": 0
@@ -1943,7 +1946,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -2037,7 +2040,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -2088,7 +2091,7 @@
                     "expression": {
                       "datatype": null,
                       "type": "property_name",
-                      "property_name": "server_modified_on"
+                      "property_name": "modified_on"
                     }
                   },
                   "type": "add_months",
@@ -2133,7 +2136,7 @@
                       "expression": {
                         "datatype": null,
                         "type": "property_name",
-                        "property_name": "server_modified_on"
+                        "property_name": "modified_on"
                       }
                     },
                     "type": "add_months",
@@ -2198,7 +2201,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -2228,7 +2231,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -2396,7 +2399,7 @@
                                 "expression": {
                                   "datatype": null,
                                   "type": "property_name",
-                                  "property_name": "server_modified_on"
+                                  "property_name": "modified_on"
                                 }
                               },
                               "type": "add_months",
@@ -2500,7 +2503,7 @@
                     "expression": {
                       "datatype": null,
                       "type": "property_name",
-                      "property_name": "server_modified_on"
+                      "property_name": "modified_on"
                     }
                   },
                   "type": "add_months",
@@ -2528,12 +2531,12 @@
                 "expression": {
                   "type": "root_doc",
                   "expression": {
-                    "datatype": null,
+                    "datatype": "string",
                     "type": "property_name",
                     "property_name": "closed"
                   }
                 },
-                "property_value": false
+                "property_value": "False"
               },
               {
                 "operator": "gte",
@@ -2547,7 +2550,7 @@
                         "expression": {
                           "datatype": null,
                           "type": "property_name",
-                          "property_name": "server_modified_on"
+                          "property_name": "modified_on"
                         }
                       },
                       "type": "add_months",
@@ -2564,9 +2567,12 @@
                     "type": "month_start_date"
                   },
                   "to_date_expression": {
-                    "datatype": "date",
-                    "type": "property_name",
-                    "property_name": "closed_on"
+                    "type": "root_doc",
+                    "expression": {
+                      "datatype": "date",
+                      "type": "property_name",
+                      "property_name": "closed_on"
+                    }
                   }
                 },
                 "property_value": 0
@@ -2642,7 +2648,7 @@
                     "expression": {
                       "datatype": null,
                       "type": "property_name",
-                      "property_name": "server_modified_on"
+                      "property_name": "modified_on"
                     }
                   },
                   "type": "add_months",
@@ -2733,7 +2739,7 @@
                         "expression": {
                           "datatype": null,
                           "type": "property_name",
-                          "property_name": "server_modified_on"
+                          "property_name": "modified_on"
                         }
                       },
                       "type": "add_months",
@@ -2761,12 +2767,12 @@
                     "expression": {
                       "type": "root_doc",
                       "expression": {
-                        "datatype": null,
+                        "datatype": "string",
                         "type": "property_name",
                         "property_name": "closed"
                       }
                     },
-                    "property_value": false
+                    "property_value": "False"
                   },
                   {
                     "operator": "gte",
@@ -2780,7 +2786,7 @@
                             "expression": {
                               "datatype": null,
                               "type": "property_name",
-                              "property_name": "server_modified_on"
+                              "property_name": "modified_on"
                             }
                           },
                           "type": "add_months",
@@ -2797,9 +2803,12 @@
                         "type": "month_start_date"
                       },
                       "to_date_expression": {
-                        "datatype": "date",
-                        "type": "property_name",
-                        "property_name": "closed_on"
+                        "type": "root_doc",
+                        "expression": {
+                          "datatype": "date",
+                          "type": "property_name",
+                          "property_name": "closed_on"
+                        }
                       }
                     },
                     "property_value": 0
@@ -2875,7 +2884,7 @@
                         "expression": {
                           "datatype": null,
                           "type": "property_name",
-                          "property_name": "server_modified_on"
+                          "property_name": "modified_on"
                         }
                       },
                       "type": "add_months",
@@ -2978,7 +2987,7 @@
                     "expression": {
                       "datatype": null,
                       "type": "property_name",
-                      "property_name": "server_modified_on"
+                      "property_name": "modified_on"
                     }
                   },
                   "type": "add_months",
@@ -3017,7 +3026,7 @@
                     "expression": {
                       "datatype": null,
                       "type": "property_name",
-                      "property_name": "server_modified_on"
+                      "property_name": "modified_on"
                     }
                   },
                   "type": "add_months",
@@ -3065,7 +3074,7 @@
                         "expression": {
                           "datatype": null,
                           "type": "property_name",
-                          "property_name": "server_modified_on"
+                          "property_name": "modified_on"
                         }
                       },
                       "type": "add_months",
@@ -3093,12 +3102,12 @@
                     "expression": {
                       "type": "root_doc",
                       "expression": {
-                        "datatype": null,
+                        "datatype": "string",
                         "type": "property_name",
                         "property_name": "closed"
                       }
                     },
-                    "property_value": false
+                    "property_value": "False"
                   },
                   {
                     "operator": "gte",
@@ -3112,7 +3121,7 @@
                             "expression": {
                               "datatype": null,
                               "type": "property_name",
-                              "property_name": "server_modified_on"
+                              "property_name": "modified_on"
                             }
                           },
                           "type": "add_months",
@@ -3129,9 +3138,12 @@
                         "type": "month_start_date"
                       },
                       "to_date_expression": {
-                        "datatype": "date",
-                        "type": "property_name",
-                        "property_name": "closed_on"
+                        "type": "root_doc",
+                        "expression": {
+                          "datatype": "date",
+                          "type": "property_name",
+                          "property_name": "closed_on"
+                        }
                       }
                     },
                     "property_value": 0
@@ -3207,7 +3219,7 @@
                         "expression": {
                           "datatype": null,
                           "type": "property_name",
-                          "property_name": "server_modified_on"
+                          "property_name": "modified_on"
                         }
                       },
                       "type": "add_months",
@@ -3301,7 +3313,7 @@
                         "expression": {
                           "datatype": null,
                           "type": "property_name",
-                          "property_name": "server_modified_on"
+                          "property_name": "modified_on"
                         }
                       },
                       "type": "add_months",
@@ -3588,7 +3600,7 @@
                     "expression": {
                       "datatype": null,
                       "type": "property_name",
-                      "property_name": "server_modified_on"
+                      "property_name": "modified_on"
                     }
                   },
                   "type": "add_months",
@@ -3618,7 +3630,7 @@
                     "expression": {
                       "datatype": null,
                       "type": "property_name",
-                      "property_name": "server_modified_on"
+                      "property_name": "modified_on"
                     }
                   },
                   "type": "add_months",
@@ -3678,7 +3690,7 @@
                             "expression": {
                               "datatype": null,
                               "type": "property_name",
-                              "property_name": "server_modified_on"
+                              "property_name": "modified_on"
                             }
                           },
                           "type": "add_months",
@@ -3706,12 +3718,12 @@
                         "expression": {
                           "type": "root_doc",
                           "expression": {
-                            "datatype": null,
+                            "datatype": "string",
                             "type": "property_name",
                             "property_name": "closed"
                           }
                         },
-                        "property_value": false
+                        "property_value": "False"
                       },
                       {
                         "operator": "gte",
@@ -3725,7 +3737,7 @@
                                 "expression": {
                                   "datatype": null,
                                   "type": "property_name",
-                                  "property_name": "server_modified_on"
+                                  "property_name": "modified_on"
                                 }
                               },
                               "type": "add_months",
@@ -3742,9 +3754,12 @@
                             "type": "month_start_date"
                           },
                           "to_date_expression": {
-                            "datatype": "date",
-                            "type": "property_name",
-                            "property_name": "closed_on"
+                            "type": "root_doc",
+                            "expression": {
+                              "datatype": "date",
+                              "type": "property_name",
+                              "property_name": "closed_on"
+                            }
                           }
                         },
                         "property_value": 0
@@ -3820,7 +3835,7 @@
                             "expression": {
                               "datatype": null,
                               "type": "property_name",
-                              "property_name": "server_modified_on"
+                              "property_name": "modified_on"
                             }
                           },
                           "type": "add_months",
@@ -3914,7 +3929,7 @@
                             "expression": {
                               "datatype": null,
                               "type": "property_name",
-                              "property_name": "server_modified_on"
+                              "property_name": "modified_on"
                             }
                           },
                           "type": "add_months",
@@ -3993,7 +4008,7 @@
                                   "expression": {
                                     "datatype": null,
                                     "type": "property_name",
-                                    "property_name": "server_modified_on"
+                                    "property_name": "modified_on"
                                   }
                                 },
                                 "type": "add_months",
@@ -4100,7 +4115,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -4196,7 +4211,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -4312,7 +4327,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -4417,7 +4432,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -4500,7 +4515,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -4550,7 +4565,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -4623,7 +4638,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -4673,7 +4688,7 @@
                           "expression": {
                             "datatype": null,
                             "type": "property_name",
-                            "property_name": "server_modified_on"
+                            "property_name": "modified_on"
                           }
                         },
                         "type": "add_months",
@@ -4758,7 +4773,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -4858,7 +4873,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -4958,7 +4973,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -5058,7 +5073,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -5157,7 +5172,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -5256,7 +5271,7 @@
                               "expression": {
                                 "datatype": null,
                                 "type": "property_name",
-                                "property_name": "server_modified_on"
+                                "property_name": "modified_on"
                               }
                             },
                             "type": "add_months",
@@ -5395,7 +5410,7 @@
                                 "expression": {
                                   "datatype": null,
                                   "type": "property_name",
-                                  "property_name": "server_modified_on"
+                                  "property_name": "modified_on"
                                 }
                               },
                               "type": "add_months",
