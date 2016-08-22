@@ -189,6 +189,7 @@ class TestCCSRecordDataSource(BaseICDSDatasourceTest):
         form.append(fp_group)
         submit_form_locally(form, self.domain, **{})
 
+
     def _submit_thr_rations_form(self, form_date, case_id, 
         thr_given_mother="0", rations_distributed=0):
 
@@ -253,487 +254,285 @@ class TestCCSRecordDataSource(BaseICDSDatasourceTest):
         self.assertEqual(row.month, datetime.date(2016,04,01))
         self.assertEqual(row.open_in_month, 0)
 
-    def test_alive_in_month(self):
-        #Died January 2016
-        #Remained Open (children alive)
+    #def test_alive_in_month(self):
+    #    #Died January 2016
+    #    #Remained Open (children alive)
 
-        self._create_ccs_case(
-            case_id = "case",
-            dob = datetime.date(1990, 01, 01),
-            edd = datetime.date(2016, 06, 02),
-            date_opened = datetime.datetime(2016, 01, 10),
-            date_modified = datetime.datetime(2016, 03, 12),
-            date_death = datetime.date(2016,01,10),
-        )
+    #    self._create_ccs_case(
+    #        case_id = "case",
+    #        dob = datetime.date(1990, 01, 01),
+    #        edd = datetime.date(2016, 06, 02),
+    #        date_opened = datetime.datetime(2016, 01, 10),
+    #        date_modified = datetime.datetime(2016, 03, 12),
+    #        date_death = datetime.date(2016,01,10),
+    #    )
 
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
+    #    query = self._rebuild_table_get_query_object()
+    #    self.assertEqual(query.count(), 7)
 
-        row = query.all()[0]        
-        self.assertEqual(row.month, datetime.date(2015,12,01))
-        self.assertEqual(row.alive_in_month, 1)
+    #    row = query.all()[0]        
+    #    self.assertEqual(row.month, datetime.date(2015,12,01))
+    #    self.assertEqual(row.alive_in_month, 1)
         
-        row = query.all()[1]        
-        self.assertEqual(row.month, datetime.date(2016,01,01))
-        self.assertEqual(row.alive_in_month, 1)
+    #    row = query.all()[1]        
+    #    self.assertEqual(row.month, datetime.date(2016,01,01))
+    #    self.assertEqual(row.alive_in_month, 1)
 
-        row = query.all()[2]        
-        self.assertEqual(row.month, datetime.date(2016,02,01))
-        self.assertEqual(row.alive_in_month, 0)
+    #    row = query.all()[2]        
+    #    self.assertEqual(row.month, datetime.date(2016,02,01))
+    #    self.assertEqual(row.alive_in_month, 0)
         
-        row = query.all()[3]
-        self.assertEqual(row.month, datetime.date(2016,03,01))
-        self.assertEqual(row.alive_in_month, 0)
+    #    row = query.all()[3]
+    #    self.assertEqual(row.month, datetime.date(2016,03,01))
+    #    self.assertEqual(row.alive_in_month, 0)
 
-    def test_lactating_post(self):
-        #Add was mid august 2015
-        #Lactating ends mid february 2016
+    #def test_lactating_post(self):
+    #    #Add was mid august 2015
+    #    #Lactating ends mid february 2016
         
-        self._create_ccs_case(
-            case_id = "case",
-            dob = datetime.date(1990, 01, 01),
-            add = datetime.date(2015, 08, 15),
-            edd = datetime.date(2015, 08, 10),
-            date_opened = datetime.datetime(2015, 02, 10),
-            date_modified = datetime.datetime(2016, 03, 12),
-        )
+    #    self._create_ccs_case(
+    #        case_id = "case",
+    #        dob = datetime.date(1990, 01, 01),
+    #        add = datetime.date(2015, 08, 15),
+    #        edd = datetime.date(2015, 08, 10),
+    #        date_opened = datetime.datetime(2015, 02, 10),
+    #        date_modified = datetime.datetime(2016, 03, 12),
+    #    )
 
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
+    #    query = self._rebuild_table_get_query_object()
+    #    self.assertEqual(query.count(), 7)
         
-        row = query.all()[1]        
-        self.assertEqual(row.month, datetime.date(2016,01,01))
-        self.assertEqual(row.lactating, 1)
-        self.assertEqual(row.ccs_status, "lactating")
+    #    row = query.all()[1]        
+    #    self.assertEqual(row.month, datetime.date(2016,01,01))
+    #    self.assertEqual(row.lactating, 1)
+    #    self.assertEqual(row.ccs_status, "lactating")
 
-        row = query.all()[2]        
-        self.assertEqual(row.month, datetime.date(2016,02,01))
-        self.assertEqual(row.lactating, 1)
-        self.assertEqual(row.ccs_status, "lactating")
+    #    row = query.all()[2]        
+    #    self.assertEqual(row.month, datetime.date(2016,02,01))
+    #    self.assertEqual(row.lactating, 1)
+    #    self.assertEqual(row.ccs_status, "lactating")
         
-        row = query.all()[3]
-        self.assertEqual(row.month, datetime.date(2016,03,01))
-        self.assertEqual(row.lactating, 0)
-        self.assertEqual(row.ccs_status, "other")
+    #    row = query.all()[3]
+    #    self.assertEqual(row.month, datetime.date(2016,03,01))
+    #    self.assertEqual(row.lactating, 0)
+    #    self.assertEqual(row.ccs_status, "other")
 
-        row = query.all()[4]
-        self.assertEqual(row.month, datetime.date(2016,04,01))
-        self.assertEqual(row.lactating, 0)
-        self.assertEqual(row.ccs_status, "other")
+    #    row = query.all()[4]
+    #    self.assertEqual(row.month, datetime.date(2016,04,01))
+    #    self.assertEqual(row.lactating, 0)
+    #    self.assertEqual(row.ccs_status, "other")
 
-    def test_preg_to_lactating(self):
-        #Add was february 2015
+    #def test_preg_to_lactating(self):
+    #    #Add was february 2015
         
-        self._create_ccs_case(
-            case_id = "case",
-            dob = datetime.date(1990, 01, 01),
-            add = datetime.date(2016, 02, 15),
-            edd = datetime.date(2016, 02, 10),
-            date_opened = datetime.datetime(2015, 02, 10),
-            date_modified = datetime.datetime(2016, 03, 12),
-        )
+    #    self._create_ccs_case(
+    #        case_id = "case",
+    #        dob = datetime.date(1990, 01, 01),
+    #        add = datetime.date(2016, 02, 15),
+    #        edd = datetime.date(2016, 02, 10),
+    #        date_opened = datetime.datetime(2015, 02, 10),
+    #        date_modified = datetime.datetime(2016, 03, 12),
+    #    )
 
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
+    #    query = self._rebuild_table_get_query_object()
+    #    self.assertEqual(query.count(), 7)
         
-        row = query.all()[1]        
-        self.assertEqual(row.month, datetime.date(2016,01,01))
-        self.assertEqual(row.pregnant, 1)
-        self.assertEqual(row.lactating, 0)
-        self.assertEqual(row.ccs_status, "pregnant")
+    #    row = query.all()[1]        
+    #    self.assertEqual(row.month, datetime.date(2016,01,01))
+    #    self.assertEqual(row.pregnant, 1)
+    #    self.assertEqual(row.lactating, 0)
+    #    self.assertEqual(row.ccs_status, "pregnant")
 
-        row = query.all()[2]        
-        self.assertEqual(row.month, datetime.date(2016,02,01))
-        self.assertEqual(row.pregnant, 1)
-        self.assertEqual(row.lactating, 0)
-        self.assertEqual(row.ccs_status, "pregnant")
+    #    row = query.all()[2]        
+    #    self.assertEqual(row.month, datetime.date(2016,02,01))
+    #    self.assertEqual(row.pregnant, 1)
+    #    self.assertEqual(row.lactating, 0)
+    #    self.assertEqual(row.ccs_status, "pregnant")
         
-        row = query.all()[3]
-        self.assertEqual(row.month, datetime.date(2016,03,01))
-        self.assertEqual(row.pregnant, 0)
-        self.assertEqual(row.lactating, 1)
-        self.assertEqual(row.ccs_status, "lactating")
+    #    row = query.all()[3]
+    #    self.assertEqual(row.month, datetime.date(2016,03,01))
+    #    self.assertEqual(row.pregnant, 0)
+    #    self.assertEqual(row.lactating, 1)
+    #    self.assertEqual(row.ccs_status, "lactating")
 
-        row = query.all()[4]
-        self.assertEqual(row.month, datetime.date(2016,04,01))
-        self.assertEqual(row.pregnant, 0)
-        self.assertEqual(row.lactating, 1)
-        self.assertEqual(row.ccs_status, "lactating")
+    #    row = query.all()[4]
+    #    self.assertEqual(row.month, datetime.date(2016,04,01))
+    #    self.assertEqual(row.pregnant, 0)
+    #    self.assertEqual(row.lactating, 1)
+    #    self.assertEqual(row.ccs_status, "lactating")
 
-    def test_pre_preg(self):
-        #opened and updated in march
-        #edd is nov 2016 (lmp in february)
+    #def test_pre_preg(self):
+    #    #opened and updated in march
+    #    #edd is nov 2016 (lmp in february)
         
-        self._create_ccs_case(
-            case_id = "case",
-            dob = datetime.date(1990, 01, 01),
-            edd = datetime.date(2016, 11, 10),
-            date_opened = datetime.datetime(2015, 03, 10),
-            date_modified = datetime.datetime(2016, 03, 12),
-        )
+    #    self._create_ccs_case(
+    #        case_id = "case",
+    #        dob = datetime.date(1990, 01, 01),
+    #        edd = datetime.date(2016, 11, 10),
+    #        date_opened = datetime.datetime(2015, 03, 10),
+    #        date_modified = datetime.datetime(2016, 03, 12),
+    #    )
 
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
+    #    query = self._rebuild_table_get_query_object()
+    #    self.assertEqual(query.count(), 7)
         
-        row = query.all()[1] 
-        self.assertEqual(row.month, datetime.date(2016,01,01))
-        self.assertEqual(row.pregnant, 0)
-        self.assertEqual(row.ccs_status, "other")
+    #    row = query.all()[1] 
+    #    self.assertEqual(row.month, datetime.date(2016,01,01))
+    #    self.assertEqual(row.pregnant, 0)
+    #    self.assertEqual(row.ccs_status, "other")
 
-        row = query.all()[2]
-        self.assertEqual(row.month, datetime.date(2016,02,01))
-        self.assertEqual(row.pregnant, 1)
-        self.assertEqual(row.ccs_status, "pregnant")
+    #    row = query.all()[2]
+    #    self.assertEqual(row.month, datetime.date(2016,02,01))
+    #    self.assertEqual(row.pregnant, 1)
+    #    self.assertEqual(row.ccs_status, "pregnant")
         
-        row = query.all()[3]
-        self.assertEqual(row.month, datetime.date(2016,03,01))
-        self.assertEqual(row.pregnant, 1)
-        self.assertEqual(row.ccs_status, "pregnant")
+    #    row = query.all()[3]
+    #    self.assertEqual(row.month, datetime.date(2016,03,01))
+    #    self.assertEqual(row.pregnant, 1)
+    #    self.assertEqual(row.ccs_status, "pregnant")
 
-        row = query.all()[4]
-        self.assertEqual(row.month, datetime.date(2016,04,01))
-        self.assertEqual(row.pregnant, 1)
-        self.assertEqual(row.ccs_status, "pregnant")
+    #    row = query.all()[4]
+    #    self.assertEqual(row.month, datetime.date(2016,04,01))
+    #    self.assertEqual(row.pregnant, 1)
+    #    self.assertEqual(row.ccs_status, "pregnant")
 
-    def test_demographic_data(self):
-        self._create_ccs_case(
-            case_id = "case",
-            caste = "sc",
-            minority = "yes",
-            resident = "yes",
-            disabled="yes",
-            dob = datetime.date(1990, 01, 01),
-            edd = datetime.date(2016, 11, 10),
-            date_opened = datetime.datetime(2015, 03, 10),
-            date_modified = datetime.datetime(2016, 03, 12),
-        )
+    #def test_demographic_data(self):
+    #    self._create_ccs_case(
+    #        case_id = "case",
+    #        caste = "sc",
+    #        minority = "yes",
+    #        resident = "yes",
+    #        disabled="yes",
+    #        dob = datetime.date(1990, 01, 01),
+    #        edd = datetime.date(2016, 11, 10),
+    #        date_opened = datetime.datetime(2015, 03, 10),
+    #        date_modified = datetime.datetime(2016, 03, 12),
+    #    )
 
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
+    #    query = self._rebuild_table_get_query_object()
+    #    self.assertEqual(query.count(), 7)
         
-        row = query.all()[0]
-        self.assertEqual(row.caste, "sc")
-        self.assertEqual(row.disabled, "yes")
-        self.assertEqual(row.minority, "yes")
-        self.assertEqual(row.resident, "yes")
+    #    row = query.all()[0]
+    #    self.assertEqual(row.caste, "sc")
+    #    self.assertEqual(row.disabled, "yes")
+    #    self.assertEqual(row.minority, "yes")
+    #    self.assertEqual(row.resident, "yes")
 
-    def test_trimester_1_2(self):
-        #edd is september
+    #def test_trimester_1_2(self):
+    #    #edd is september
         
-        self._create_ccs_case(
-            case_id = "case",
-            dob = datetime.date(1990, 01, 01),
-            edd = datetime.date(2016, 09, 10),
-            date_opened = datetime.datetime(2015, 12, 10),
-            date_modified = datetime.datetime(2016, 03, 12),
-        )
+    #    self._create_ccs_case(
+    #        case_id = "case",
+    #        dob = datetime.date(1990, 01, 01),
+    #        edd = datetime.date(2016, 09, 10),
+    #        date_opened = datetime.datetime(2015, 12, 10),
+    #        date_modified = datetime.datetime(2016, 03, 12),
+    #    )
 
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
+    #    query = self._rebuild_table_get_query_object()
+    #    self.assertEqual(query.count(), 7)
         
-        row = query.all()[1] 
-        self.assertEqual(row.month, datetime.date(2016,01,01))
-        self.assertEqual(row.trimester, 1)
+    #    row = query.all()[1] 
+    #    self.assertEqual(row.month, datetime.date(2016,01,01))
+    #    self.assertEqual(row.trimester, 1)
 
-        row = query.all()[2]
-        self.assertEqual(row.month, datetime.date(2016,02,01))
-        self.assertEqual(row.trimester, 1)
+    #    row = query.all()[2]
+    #    self.assertEqual(row.month, datetime.date(2016,02,01))
+    #    self.assertEqual(row.trimester, 1)
         
-        row = query.all()[3]
-        self.assertEqual(row.month, datetime.date(2016,03,01))
-        self.assertEqual(row.trimester, 2)
+    #    row = query.all()[3]
+    #    self.assertEqual(row.month, datetime.date(2016,03,01))
+    #    self.assertEqual(row.trimester, 2)
 
-        row = query.all()[4]
-        self.assertEqual(row.month, datetime.date(2016,04,01))
-        self.assertEqual(row.trimester, 2)
+    #    row = query.all()[4]
+    #    self.assertEqual(row.month, datetime.date(2016,04,01))
+    #    self.assertEqual(row.trimester, 2)
 
-    def test_trimester_3_none(self):
-        #edd and add is march
+    #def test_trimester_3_none(self):
+    #    #edd and add is march
         
-        self._create_ccs_case(
-            case_id = "case",
-            dob = datetime.date(1990, 01, 01),
-            edd = datetime.date(2016, 03, 10),
-            add = datetime.date(2016, 03, 12),
-            date_opened = datetime.datetime(2015, 12, 10),
-            date_modified = datetime.datetime(2016, 03, 12),
-        )
+    #    self._create_ccs_case(
+    #        case_id = "case",
+    #        dob = datetime.date(1990, 01, 01),
+    #        edd = datetime.date(2016, 03, 10),
+    #        add = datetime.date(2016, 03, 12),
+    #        date_opened = datetime.datetime(2015, 12, 10),
+    #        date_modified = datetime.datetime(2016, 03, 12),
+    #    )
 
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
+    #    query = self._rebuild_table_get_query_object()
+    #    self.assertEqual(query.count(), 7)
         
-        row = query.all()[1] 
-        self.assertEqual(row.month, datetime.date(2016,01,01))
-        self.assertEqual(row.trimester, 3)
+    #    row = query.all()[1] 
+    #    self.assertEqual(row.month, datetime.date(2016,01,01))
+    #    self.assertEqual(row.trimester, 3)
 
-        row = query.all()[2]
-        self.assertEqual(row.month, datetime.date(2016,02,01))
-        self.assertEqual(row.trimester, 3)
+    #    row = query.all()[2]
+    #    self.assertEqual(row.month, datetime.date(2016,02,01))
+    #    self.assertEqual(row.trimester, 3)
         
-        row = query.all()[3]
-        self.assertEqual(row.month, datetime.date(2016,03,01))
-        self.assertEqual(row.trimester, 3)
+    #    row = query.all()[3]
+    #    self.assertEqual(row.month, datetime.date(2016,03,01))
+    #    self.assertEqual(row.trimester, 3)
 
-        row = query.all()[4]
-        self.assertEqual(row.month, datetime.date(2016,04,01))
-        self.assertEqual(row.trimester, None)
+    #    row = query.all()[4]
+    #    self.assertEqual(row.month, datetime.date(2016,04,01))
+    #    self.assertEqual(row.trimester, None)
 
-    def test_thr_rations(self):
-        #edd is september
+    #def test_thr_rations(self):
+    #    #edd is september
         
-        self._create_ccs_case(
-            case_id = "case",
-            dob = datetime.date(1990, 01, 01),
-            edd = datetime.date(2016, 09, 10),
-            date_opened = datetime.datetime(2015, 12, 10),
-            date_modified = datetime.datetime(2016, 03, 12),
-        )
+    #    self._create_ccs_case(
+    #        case_id = "case",
+    #        dob = datetime.date(1990, 01, 01),
+    #        edd = datetime.date(2016, 09, 10),
+    #        date_opened = datetime.datetime(2015, 12, 10),
+    #        date_modified = datetime.datetime(2016, 03, 12),
+    #    )
 
-        self._submit_thr_rations_form(
-            form_date=datetime.date(2015,02,02), 
-            case_id="case", 
-            thr_given_mother="1",
-            rations_distributed=5,
-        )
+    #    self._submit_thr_rations_form(
+    #        form_date=datetime.date(2015,02,02), 
+    #        case_id="case", 
+    #        thr_given_mother="1",
+    #        rations_distributed=5,
+    #    )
 
-        self._submit_thr_rations_form(
-            form_date=datetime.date(2015,02,06), 
-            case_id="case", 
-            thr_given_mother="1",
-            rations_distributed=6,
-        )
+    #    self._submit_thr_rations_form(
+    #        form_date=datetime.date(2015,02,06), 
+    #        case_id="case", 
+    #        thr_given_mother="1",
+    #        rations_distributed=6,
+    #    )
 
-        self._submit_thr_rations_form(
-            form_date=datetime.date(2015,03,10), 
-            case_id="case", 
-            thr_given_mother="1",
-            rations_distributed=21,
-        )
+    #    self._submit_thr_rations_form(
+    #        form_date=datetime.date(2015,03,10), 
+    #        case_id="case", 
+    #        thr_given_mother="1",
+    #        rations_distributed=21,
+    #    )
 
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
+    #    query = self._rebuild_table_get_query_object()
+    #    self.assertEqual(query.count(), 7)
         
-        row = query.all()[1]
-        self.assertEqual(row.month, datetime.date(2016,01,01))
-        self.assertEqual(row.num_rations_distributed, None)
-        self.assertEqual(row.rations_21_plus_distributed, 0)
+    #    row = query.all()[1]
+    #    self.assertEqual(row.month, datetime.date(2016,01,01))
+    #    self.assertEqual(row.num_rations_distributed, None)
+    #    self.assertEqual(row.rations_21_plus_distributed, 0)
 
 
-        row = query.all()[2]
-        self.assertEqual(row.month, datetime.date(2016,02,01))
-        self.assertEqual(row.num_rations_distributed, 11)
-        self.assertEqual(row.rations_21_plus_distributed, 0)
+    #    row = query.all()[2]
+    #    self.assertEqual(row.month, datetime.date(2016,02,01))
+    #    self.assertEqual(row.num_rations_distributed, 11)
+    #    self.assertEqual(row.rations_21_plus_distributed, 0)
         
-        row = query.all()[3]
-        self.assertEqual(row.month, datetime.date(2016,03,01))
-        self.assertEqual(row.num_rations_distributed, 21)
-        self.assertEqual(row.rations_21_plus_distributed, 1)
+    #    row = query.all()[3]
+    #    self.assertEqual(row.month, datetime.date(2016,03,01))
+    #    self.assertEqual(row.num_rations_distributed, 21)
+    #    self.assertEqual(row.rations_21_plus_distributed, 1)
 
-        row = query.all()[4]
-        self.assertEqual(row.month, datetime.date(2016,04,01))
-        self.assertEqual(row.num_rations_distributed, None)
-        self.assertEqual(row.rations_21_plus_distributed, 0)
-
-    def test_pregnant_case(self):
-        #last visit date in May 2016
-        #registered in trimester 2, January 2016
-        
-        self._create_ccs_case(
-            case_id = "case",
-            dob = datetime.date(1990, 01, 01),
-            edd = datetime.date(2016, 06, 02),
-            caste = "sc",
-            minority = "yes",
-            resident = "yes",
-            disabled="yes",
-            last_preg_tt="yes",
-            num_anc_complete=2,
-            tt_complete_date=datetime.date(2016, 04, 10),
-            bp1_date=datetime.date(2016, 02, 10),
-            bp2_date=datetime.date(2016, 04, 02),
-            date_opened = datetime.datetime(2016, 01, 10),
-            date_modified = datetime.datetime(2016, 05, 12),
-        )
-
-        self._submit_bp_form(
-            form_date=datetime.datetime(2016,03,05),
-            case_id = "case",
-            using_ifa="no",
-            num_ifa_consumed_last_seven_days=None,
-            anemia=None,
-            extra_meal="no",
-            resting_during_pregnancy="no",
-            counsel_immediate_bf="no",
-            counsel_bp_vid="no",
-            counsel_preparation="no",
-            counsel_fp_vid="no",
-            counsel_immediate_conception="no",
-            counsel_accessible_postpartum_fp="no")
-
-        self._submit_bp_form(
-            form_date=datetime.datetime(2016,04,05),
-            case_id = "case",
-            using_ifa="yes",
-            num_ifa_consumed_last_seven_days=5,
-            anemia="moderate",
-            extra_meal="yes",
-            resting_during_pregnancy="yes",
-            counsel_immediate_bf="yes",
-            counsel_bp_vid="yes",
-            counsel_preparation="yes",
-            counsel_fp_vid="yes",
-            counsel_immediate_conception="yes",
-            counsel_accessible_postpartum_fp="yes")
-
-        self._submit_bp_form(
-            form_date=datetime.datetime(2016,05,05),
-            case_id = "case",
-            using_ifa="no",
-            num_ifa_consumed_last_seven_days=None,
-            anemia=None,
-            extra_meal="no",
-            resting_during_pregnancy="no",
-            counsel_immediate_bf="no",
-            counsel_bp_vid="no",
-            counsel_preparation="no",
-            counsel_fp_vid="no",
-            counsel_immediate_conception="no",
-            counsel_accessible_postpartum_fp="no")
-
-        query = self._rebuild_table_get_query_object()
-        self.assertEqual(query.count(), 7)
-
-        #Month 0 (February)
-        row = query.all()[0]
-        self.assertEqual(row.caste, "sc")
-        self.assertEqual(row.disabled, "yes")
-        self.assertEqual(row.minority, "yes")
-        self.assertEqual(row.resident, "yes")
-        self.assertEqual(row.ccs_status, "pregnant")
-        self.assertEqual(row.open_in_month, 1)
-        self.assertEqual(row.alive_in_month, 1)
-        self.assertEqual(row.valid_in_month, 1)
-        self.assertEqual(row.trimester, 2)
-        self.assertEqual(row.lactating, 0)
-        self.assertEqual(row.ccs_status, 1)
-        self.assertEqual(row.num_rations_distributed, 0)
-        self.assertEqual(row.rations_21_plus_distributed, 0)
-        self.assertEqual(row.thr_eligible, 1)
-        self.assertEqual(row.tetanus_complete, 0)
-        self.assertEqual(row.delivered_in_month, 0)
-        self.assertEqual(row.anc1_received_by_delivery, 0)
-        self.assertEqual(row.anc2_received_by_delivery, 0)
-        self.assertEqual(row.anc3_received_by_delivery, 0)
-        self.assertEqual(row.anc4_received_by_delivery, 0)
-        self.assertEqual(row.registration_trimester_at_delivery, None)
-        self.assertEqual(row.using_ifa, 0)
-        self.assertEqual(row.ifa_consumed_last_seven_days, 0)
-        self.assertEqual(row.anemic_severe, 0)
-        self.assertEqual(row.anemic_moderate, 0)
-        self.assertEqual(row.anemic_normal, 0)
-        self.assertEqual(row.anemic_unknown, 1)
-        self.assertEqual(row.anemic_normal, 0)
-        self.assertEqual(row.extra_meal, 0)
-        self.assertEqual(row.resting_during_pregnancy, 0)
-        self.assertEqual(row.bp_visited_in_month, 0)
-        self.assertEqual(row.pnc_visited_in_month, 0)
-        self.assertEqual(row.trimester_2, 1)
-        self.assertEqual(row.trimester_3, 0)
-        self.assertEqual(row.counsel_immediate_bf, 0)
-        self.assertEqual(row.counsel_bp_vid, 0)
-        self.assertEqual(row.counsel_preparation, 0)
-        self.assertEqual(row.counsel_fp_vid, 0)
-        self.assertEqual(row.counsel_immediate_conception, 0)
-        self.assertEqual(row.counsel_accessible_postpartum_fp, 0)
-        self.assertEqual(row.bp1_complete, 1)
-        self.assertEqual(row.bp2_complete, 0)
-        self.assertEqual(row.bp3_complete, 0)
-        self.assertEqual(row.postnatal, 0)
-
-        #month 1 - March
-        row.query.all()[1]
-        self.assertEqual(row.ccs_status, "pregnant")
-        self.assertEqual(row.open_in_month, 1)
-        self.assertEqual(row.alive_in_month, 1)
-        self.assertEqual(row.valid_in_month, 1)
-        self.assertEqual(row.trimester, 2)
-        self.assertEqual(row.lactating, 0)
-        self.assertEqual(row.pregnant, 1)
-        self.assertEqual(row.num_rations_distributed, 0)
-        self.assertEqual(row.rations_21_plus_distributed, 0)
-        self.assertEqual(row.thr_eligible, 1)
-        self.assertEqual(row.tetanus_complete, 0)
-        self.assertEqual(row.delivered_in_month, 0)
-        self.assertEqual(row.anc1_received_by_delivery, 0)
-        self.assertEqual(row.anc2_received_by_delivery, 0)
-        self.assertEqual(row.anc3_received_by_delivery, 0)
-        self.assertEqual(row.anc4_received_by_delivery, 0)
-        self.assertEqual(row.registration_trimester_at_delivery, None)
-        self.assertEqual(row.using_ifa, 0)
-        self.assertEqual(row.ifa_consumed_last_seven_days, 0)
-        self.assertEqual(row.anemic_severe, 0)
-        self.assertEqual(row.anemic_moderate, 0)
-        self.assertEqual(row.anemic_normal, 0)
-        self.assertEqual(row.anemic_unknown, 1)
-        self.assertEqual(row.anemic_normal, 0)
-        self.assertEqual(row.extra_meal, 0)
-        self.assertEqual(row.resting_during_pregnancy, 0)
-        self.assertEqual(row.bp_visited_in_month, 0)
-        self.assertEqual(row.pnc_visited_in_month, 0)
-        self.assertEqual(row.trimester_2, 1)
-        self.assertEqual(row.trimester_3, 0)
-        self.assertEqual(row.counsel_immediate_bf, 0)
-        self.assertEqual(row.counsel_bp_vid, 0)
-        self.assertEqual(row.counsel_preparation, 0)
-        self.assertEqual(row.counsel_fp_vid, 0)
-        self.assertEqual(row.counsel_immediate_conception, 0)
-        self.assertEqual(row.counsel_accessible_postpartum_fp, 0)
-        self.assertEqual(row.bp1_complete, 1)
-        self.assertEqual(row.bp2_complete, 0)
-        self.assertEqual(row.bp3_complete, 0)
-        self.assertEqual(row.postnatal, 0)
-
-        #month 2 - April
-        row.query.all()[1]
-        self.assertEqual(row.ccs_status, "pregnant")
-        self.assertEqual(row.open_in_month, 1)
-        self.assertEqual(row.alive_in_month, 1)
-        self.assertEqual(row.valid_in_month, 1)
-        self.assertEqual(row.trimester, 2)
-        self.assertEqual(row.lactating, 0)
-        self.assertEqual(row.pregnant, 1)
-        self.assertEqual(row.num_rations_distributed, 0)
-        self.assertEqual(row.rations_21_plus_distributed, 0)
-        self.assertEqual(row.thr_eligible, 1)
-        self.assertEqual(row.tetanus_complete, 0)
-        self.assertEqual(row.delivered_in_month, 0)
-        self.assertEqual(row.anc1_received_by_delivery, 0)
-        self.assertEqual(row.anc2_received_by_delivery, 0)
-        self.assertEqual(row.anc3_received_by_delivery, 0)
-        self.assertEqual(row.anc4_received_by_delivery, 0)
-        self.assertEqual(row.registration_trimester_at_delivery, None)
-        self.assertEqual(row.using_ifa, 1)
-        self.assertEqual(row.ifa_consumed_last_seven_days, 0)
-        self.assertEqual(row.anemic_severe, 0)
-        self.assertEqual(row.anemic_moderate, 0)
-        self.assertEqual(row.anemic_normal, 0)
-        self.assertEqual(row.anemic_unknown, 1)
-        self.assertEqual(row.anemic_normal, 0)
-        self.assertEqual(row.extra_meal, 0)
-        self.assertEqual(row.resting_during_pregnancy, 0)
-        self.assertEqual(row.bp_visited_in_month, 0)
-        self.assertEqual(row.pnc_visited_in_month, 0)
-        self.assertEqual(row.trimester_2, 1)
-        self.assertEqual(row.trimester_3, 0)
-        self.assertEqual(row.counsel_immediate_bf, 0)
-        self.assertEqual(row.counsel_bp_vid, 0)
-        self.assertEqual(row.counsel_preparation, 0)
-        self.assertEqual(row.counsel_fp_vid, 0)
-        self.assertEqual(row.counsel_immediate_conception, 0)
-        self.assertEqual(row.counsel_accessible_postpartum_fp, 0)
-        self.assertEqual(row.bp1_complete, 1)
-        self.assertEqual(row.bp2_complete, 1)
-        self.assertEqual(row.bp3_complete, 0)
-        self.assertEqual(row.postnatal, 0)
+    #    row = query.all()[4]
+    #    self.assertEqual(row.month, datetime.date(2016,04,01))
+    #    self.assertEqual(row.num_rations_distributed, None)
+    #    self.assertEqual(row.rations_21_plus_distributed, 0)
         
         
