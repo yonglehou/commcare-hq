@@ -1,3 +1,4 @@
+from corehq.apps.accounting.models import Currency
 from corehq.util.validation import is_url_or_host_banned
 from django.test import TestCase
 
@@ -9,6 +10,7 @@ def inclusive_range(start, stop):
 class ValidationTestCase(TestCase):
 
     def testBannedHosts(self):
+        Currency.get_default()
         self.assertTrue(is_url_or_host_banned('anything.commcarehq.org'))
 
         for i in inclusive_range(0, 255):

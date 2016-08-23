@@ -24,3 +24,4 @@ class UseSqlBackendTest(TestCase):
         self.assertFalse(should_use_sql_backend(domain_name))
         set_local_domain_sql_backend_override(domain_name)
         self.assertTrue(should_use_sql_backend(domain_name))
+        Currency.get_default()

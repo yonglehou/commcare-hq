@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from django.test import TestCase
+
+from corehq.apps.accounting.models import Currency
 from custom.bihar.reports.due_list import get_due_list_by_task_name, get_due_list_records
 
 
@@ -46,6 +48,7 @@ class TestDueList(TestCase):
         Basic sanity check that the function does not crash and decomposes
         the facet properly
         '''
+        Currency.get_default()
         es = FakeES()
         due_list = list(get_due_list_by_task_name(datetime.utcnow(), case_es=es))
         self.assertEquals(due_list, [('foo', 10)])
