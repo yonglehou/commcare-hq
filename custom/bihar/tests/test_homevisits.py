@@ -2,6 +2,8 @@ from datetime import date
 import json
 import os
 from django.test import TestCase
+
+from corehq.apps.accounting.models import Currency
 from custom.bihar.models import BiharCase, CareBiharFluff
 
 
@@ -43,6 +45,7 @@ class TestHomeVisits(TestCase):
         self.assertIndicatorsEmpty(indicator)
 
     def testBPAllInFirstTri(self):
+        Currency.get_default()
         indicator = CareBiharFluff()
 
         dates = {

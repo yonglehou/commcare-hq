@@ -1,6 +1,8 @@
 import uuid
 from django.core.management import call_command
 from django.test import TestCase
+
+from corehq.apps.accounting.models import Currency
 from corehq.form_processor.interfaces.dbaccessors import FormAccessors, CaseAccessors
 from corehq.form_processor.tests.utils import FormProcessorTestUtils
 from corehq.form_processor.utils import should_use_sql_backend
@@ -14,6 +16,7 @@ class MigrationTestCase(TestCase):
         self.domain = uuid.uuid4().hex
 
     def test_basic_form_migration(self):
+        Currency.get_default()
         create_and_save_a_form(self.domain)
         self.assertFalse(should_use_sql_backend(self.domain))
         self.assertEqual(1, len(FormAccessors(domain=self.domain).get_all_form_ids_in_domain()))

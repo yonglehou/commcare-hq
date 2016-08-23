@@ -1,5 +1,7 @@
 import uuid
 from django.test import TestCase
+
+from corehq.apps.accounting.models import Currency
 from corehq.apps.domain.shortcuts import create_domain
 from corehq.form_processor.utils.general import get_local_domain_sql_backend_override, \
     set_local_domain_sql_backend_override, should_use_sql_backend
@@ -11,6 +13,7 @@ class UseSqlBackendTest(TestCase):
         self.assertIsNone(get_local_domain_sql_backend_override(uuid.uuid4().hex))
 
     def test_local_domain_sql_backend_override(self):
+        Currency.get_default()
         domain_name = uuid.uuid4().hex
         set_local_domain_sql_backend_override(domain_name)
         self.assertTrue(get_local_domain_sql_backend_override(domain_name))
