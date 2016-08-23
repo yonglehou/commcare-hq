@@ -1,5 +1,7 @@
 import re
 from django.test.testcases import TestCase
+
+from corehq.apps.accounting.models import Currency
 from corehq.apps.sms.api import incoming
 from corehq.apps.sms.models import SMS, OUTGOING, PhoneNumber
 from corehq.apps.sms.util import strip_plus
@@ -48,6 +50,7 @@ class TestScript(TestCase):
 class TestParser(TestScript):
 
     def test_parse_script(self):
+        Currency.get_default()
         script = """
             16176023315 > test
             16176023315 < test2

@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.test import TestCase
 from casexml.apps.case.xform import extract_case_blocks
+
+from corehq.apps.accounting.models import Currency
 from corehq.apps.api.es import report_term_filter
 from corehq.pillows.base import VALUE_TAG
 from corehq.pillows.case import transform_case_for_elasticsearch
@@ -457,6 +459,7 @@ class testReportCaseProcessing(TestCase):
         """
         Test that xform pillow can process and cleanup a single xform with a case submission
         """
+        Currency.get_default()
         xform = XFORM_SINGLE_CASE
         changed = transform_xform_for_elasticsearch(xform)
 
