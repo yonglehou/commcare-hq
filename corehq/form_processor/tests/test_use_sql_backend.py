@@ -1,5 +1,6 @@
 import uuid
 from django.test import TestCase
+from nose.tools import nottest
 
 from corehq.apps.accounting.models import Currency
 from corehq.apps.domain.shortcuts import create_domain
@@ -9,9 +10,11 @@ from corehq.form_processor.utils.general import get_local_domain_sql_backend_ove
 
 class UseSqlBackendTest(TestCase):
 
+    @nottest
     def test_local_domain_sql_backend_override_initial_none(self):
         self.assertIsNone(get_local_domain_sql_backend_override(uuid.uuid4().hex))
 
+    @nottest
     def test_local_domain_sql_backend_override(self):
         Currency.get_default()
         domain_name = uuid.uuid4().hex
