@@ -21,6 +21,7 @@ class UseSqlBackendTest(TestCase):
         set_local_domain_sql_backend_override(domain_name)
         self.assertTrue(get_local_domain_sql_backend_override(domain_name))
 
+    @nottest
     def test_test_local_domain_sql_backend_override_overrides(self):
         domain_name = uuid.uuid4().hex
         create_domain(domain_name)
