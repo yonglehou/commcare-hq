@@ -202,8 +202,10 @@ class TestConvertSavedExportSchemaToCaseExportInstance(TestConvertBase):
     @classmethod
     def tearDownClass(cls):
         cls.project.delete()
+        super(TestConvertSavedExportSchemaToCaseExportInstance, cls).tearDownClass()
 
     def setUp(self):
+        super(TestConvertSavedExportSchemaToCaseExportInstance, self).setUp()
         delete_all_export_instances()
 
     def test_basic_conversion(self, _):
