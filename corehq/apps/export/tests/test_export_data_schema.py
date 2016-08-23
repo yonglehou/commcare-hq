@@ -3,6 +3,7 @@ from mock import patch
 
 from django.test import SimpleTestCase, TestCase
 
+from corehq.apps.accounting.models import Currency
 from corehq.apps.export.models.new import MAIN_TABLE, \
     PathNode, _question_path_to_path_nodes
 
@@ -490,6 +491,7 @@ class TestExportDataSchemaVersionControl(TestCase, TestXmlMixin):
         super(TestExportDataSchemaVersionControl, self).tearDown()
 
     def test_rebuild_version_control(self):
+        Currency.get_default()
         app = self.current_app
 
         schema = FormExportDataSchema.generate_schema_from_builds(
