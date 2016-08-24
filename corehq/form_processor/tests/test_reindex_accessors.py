@@ -116,17 +116,17 @@ class BaseCaseReindexAccessorTest(BaseReindexAccessorTest):
         return [doc.case_id for doc in docs]
 
 
-class UnshardedCaseReindexAccessorTests(BaseUnshardedAccessorMixin, BaseCaseReindexAccessorTest, TestCase):
-    @classmethod
-    def setUpClass(cls):
-        super(UnshardedCaseReindexAccessorTests, cls).class_setup()
-        super(UnshardedCaseReindexAccessorTests, cls).setUpClass()
-        super(UnshardedCaseReindexAccessorTests, cls).class_setup_reindex()
-
-    @classmethod
-    def tearDownClass(cls):
-        super(UnshardedCaseReindexAccessorTests, cls).class_teardown_reindex()
-        super(UnshardedCaseReindexAccessorTests, cls).tearDownClass()
+# class UnshardedCaseReindexAccessorTests(BaseUnshardedAccessorMixin, BaseCaseReindexAccessorTest, TestCase):
+#     @classmethod
+#     def setUpClass(cls):
+#         super(UnshardedCaseReindexAccessorTests, cls).class_setup()
+#         super(UnshardedCaseReindexAccessorTests, cls).setUpClass()
+#         super(UnshardedCaseReindexAccessorTests, cls).class_setup_reindex()
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         super(UnshardedCaseReindexAccessorTests, cls).class_teardown_reindex()
+#         super(UnshardedCaseReindexAccessorTests, cls).tearDownClass()
 
 
 class ShardedCaseReindexAccessorTests(BaseShardedAccessorMixin, BaseCaseReindexAccessorTest, TestCase):
@@ -193,18 +193,18 @@ class BaseLedgerReindexAccessorTest(BaseReindexAccessorTest):
         return [doc.ledger_reference.as_id() for doc in docs]
 
 
-class UnshardedLedgerReindexAccessorTests(BaseUnshardedAccessorMixin, BaseLedgerReindexAccessorTest, TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        super(UnshardedLedgerReindexAccessorTests, cls).class_setup()
-        super(UnshardedLedgerReindexAccessorTests, cls).setUpClass()
-        super(UnshardedLedgerReindexAccessorTests, cls).class_setup_reindex()
-
-    @classmethod
-    def tearDownClass(cls):
-        super(UnshardedLedgerReindexAccessorTests, cls).class_teardown_reindex()
-        super(UnshardedLedgerReindexAccessorTests, cls).tearDownClass()
+# class UnshardedLedgerReindexAccessorTests(BaseUnshardedAccessorMixin, BaseLedgerReindexAccessorTest, TestCase):
+#
+#     @classmethod
+#     def setUpClass(cls):
+#         super(UnshardedLedgerReindexAccessorTests, cls).class_setup()
+#         super(UnshardedLedgerReindexAccessorTests, cls).setUpClass()
+#         super(UnshardedLedgerReindexAccessorTests, cls).class_setup_reindex()
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         super(UnshardedLedgerReindexAccessorTests, cls).class_teardown_reindex()
+#         super(UnshardedLedgerReindexAccessorTests, cls).tearDownClass()
 
 
 class ShardedLedgerReindexAccessorTests(BaseShardedAccessorMixin, BaseLedgerReindexAccessorTest, TestCase):
